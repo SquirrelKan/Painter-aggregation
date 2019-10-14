@@ -158,10 +158,10 @@ export default {
     getProjects () {
       let self = this
       self.$axios.get('/api/v1/project/getProjects', {}).then(function (response) {
-        console.log('getProjects test')
+        //console.log('getProjects test')
         self.projects = response.data.data.projects
-        console.log(response.data.data)
-        console.log(self.projects)
+ //       console.log(response.data.data)
+        //console.log(self.projects)
         self.tempList = []
         for (var i = 0; i < self.pageSize; i++) {
           self.tempList.push(self.projects[i])

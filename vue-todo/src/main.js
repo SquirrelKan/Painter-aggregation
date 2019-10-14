@@ -29,8 +29,7 @@ new Vue({
   el: '#app',
   router,
   store,
-  components: { App },
-  template: '<App/>',
+  render: h=>h(App),
   methods: {
     checkLogion () {
       // 检查是否存在session

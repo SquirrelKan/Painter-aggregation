@@ -138,8 +138,8 @@ export default {
     }
   },
   mounted () {
-    // this.getPaint()
-    // this.currentChangePage(this.paintInfos, this.currentPage)
+    //this.getPaint()
+    this.currentChangePage(this.paintInfos, this.currentPage)
   },
   methods: {
     getPaint () {
