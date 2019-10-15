@@ -8,10 +8,12 @@ import 'element-ui/lib/theme-chalk/index.css'
 import locale from 'element-ui/lib/locale/lang/zh-TW'
 import axios from 'axios'
 import store from './store'
+//import components from './components'
 // import VueSession from 'vue-session'
 
 Vue.prototype.$axios = axios
 Vue.use(Element, { locale })
+//Vue.use(components)
 Vue.config.productionTip = false
 // Vue.use(VueSession)
 
