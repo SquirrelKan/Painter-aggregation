@@ -5,17 +5,21 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
+    "start": "set DEBUG=*debug:* & nodemon ./bin/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "Andrew",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
+    "debug": "^4.1.1",
     "express": "^4.17.1",
     "js-md5": "^0.7.3",
     "jsonwebtoken": "^8.5.1",
-    "mysql": "^2.17.1"
+    "mocha": "^8.1.1",
+    "moment": "^2.27.0",
+    "mysql": "^2.18.1"
   },
   "devDependencies": {
     "nodemon": "^1.19.1"

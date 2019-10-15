@@ -1,3 +1,4 @@
+//廢棄
 var models = require('../db/db');
 var express = require('express');
 var router = express.Router();

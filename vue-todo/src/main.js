@@ -8,10 +8,14 @@ import 'element-ui/lib/theme-chalk/index.css'
 import locale from 'element-ui/lib/locale/lang/zh-TW'
 import axios from 'axios'
 import store from './store'
+//import components from './components'
 // import VueSession from 'vue-session'
 
 Vue.prototype.$axios = axios
-Vue.use(Element, { locale })
+Vue.use(Element, {
+  locale
+})
+//Vue.use(components)
 Vue.config.productionTip = false
 // Vue.use(VueSession)
 
@@ -29,9 +33,9 @@ new Vue({
   el: '#app',
   router,
   store,
-  render: h=>h(App),
+  render: h => h(App),
   methods: {
-    checkLogion () {
+    checkLogion() {
       // 检查是否存在session
       // cookie操作方法在源码里有或者参考网上的即可
       if (!this.getCookie('session')) {

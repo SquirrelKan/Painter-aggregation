@@ -7,7 +7,7 @@
 
 <script>
 export default {
-  name: 'App'
+  name: "App"
   // provide: function () {
   //   return {
   //     reload: this.reload
@@ -26,20 +26,23 @@ export default {
   //     })
   //   }
   // }
-}
+};
 </script>
 
 <style>
-*{
+* {
   padding: 0;
   margin: 0;
 }
-html,body{
+
+html,
+body {
   width: 100%;
   height: 100%;
+  background: rgb(143, 141, 141);
 }
+
 #app {
   height: 100%;
 }
-
 </style>

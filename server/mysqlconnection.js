@@ -1,31 +1,49 @@
 //
+var debug = require("debug")("debug:mysqlconnection");
 var mysql = require("mysql")
 var pool = mysql.createPool({
-    host: '127.0.0.1',
-    user: 'root',
-    password: 'root',
-    database: 'member',
-    connectionLimit : 10,
+    host: '192.168.137.4',
+    user: 'maple',
+    password: 'aicdfida',
+    database: 'paintercol',
+    connectionLimit: 10,
+    timezone: "08:00"
 })
 
-var query = function(sql, options, callback) {
-    // console.log(sql, options ,callback)
+var query = function (spName, options, callback) {
+    let spQuery = "CALL ??(?)"
     if (typeof options === "function") {
         callback = options
         options = undefined
+        spQuery = "CALL ??()"
+        pool.getConnection(function (err, conn) {
+            if (err) {
+                // throw err
+                callback(err, null, null)
+            } else {
+                conn.query(spQuery, spName, function (err, results, fields) {
+                    // callback
+                    callback(err, results, fields)
+                })
+                conn.release()
+            }
+        })
+    } else {
+        pool.getConnection(function (err, conn) {
+            // debug(sql, param)
+            if (err) {
+                // throw err
+                callback(err, null, null)
+            } else {
+                conn.query(spQuery, [spName, options], function (err, results, fields) {
+                    // callback
+                    callback(err, results, fields)
+                })
+                conn.release()
+            }
+        })
     }
-    pool.getConnection(function(err,conn){
-        if (err){
-           callback(err,null,null) 
-        } else {
-            conn.query(sql, options, function(err,results,fields){
-                // callback
-                callback(err,results,fields)
-            })
-            conn.release()
-        }
-    })
 }
 
-console.log('sqlpool載入完成')
+debug('sqlpool載入完成')
 module.exports = query
