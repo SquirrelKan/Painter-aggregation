@@ -1,7 +1,13 @@
 <template>
   <div>
-  <!--<el-header>-->
-    <el-menu :default-active="$route.path" class="el-menu-demo" mode="horizontal" @select="handleSelect" @update="login">
+    <!--<el-header>-->
+    <el-menu
+      :default-active="$route.path"
+      class="el-menu-demo"
+      mode="horizontal"
+      @select="handleSelect"
+      @update="login"
+    >
       <el-row>
         <el-col :span="1" :offset="0">
           <el-menu-item index="/">首頁</el-menu-item>
@@ -21,20 +27,21 @@
         <el-col :span="2" :offset="15">
           <el-menu-item v-if="!isLogin" index="/login">登入</el-menu-item>
           <el-menu-item v-else>
-          <el-dropdown>
-            <el-button type="primary">
-              Hi {{userInfo.nickname}}<i class="el-icon-arrow-down el-icon--right"></i>
-            </el-button>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>
-                <router-link to="/accoutinfo">個人資料</router-link>
-              </el-dropdown-item>
-              <el-dropdown-item>Action 2</el-dropdown-item>
-              <el-dropdown-item>Action 3</el-dropdown-item>
-              <el-dropdown-item>Action 4</el-dropdown-item>
-              <el-dropdown-item>Action 5</el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
+            <el-dropdown>
+              <el-button type="primary">
+                Hi {{userInfo.nickname}}
+                <i class="el-icon-arrow-down el-icon--right"></i>
+              </el-button>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item>
+                  <router-link to="/accoutinfo">個人資料</router-link>
+                </el-dropdown-item>
+                <el-dropdown-item>Action 2</el-dropdown-item>
+                <el-dropdown-item>Action 3</el-dropdown-item>
+                <el-dropdown-item>Action 4</el-dropdown-item>
+                <el-dropdown-item>Action 5</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
           </el-menu-item>
         </el-col>
         <el-col :span="1">
@@ -52,25 +59,25 @@
 <script>
 // import { mapState } from 'vuex'
 export default {
-  name: 'Name',
-  provide: function () {
+  name: "Name",
+  provide: function() {
     return {
       reload: this.reload,
       getUserInfo: this.getuserinfo
-    }
+    };
   },
-  data () {
+  data() {
     return {
-      activeIndex: '1',
+      activeIndex: "1",
       isLogin: false,
       userInfo: {
-        username: '',
-        identity_name: ''
+        username: "",
+        identity_name: ""
       }
-    }
+    };
   },
-  mounted () {
-    this.getUserInfo()
+  mounted() {
+    this.getUserInfo();
   },
   // computed: {
   //   ...mapState({
@@ -78,52 +85,55 @@ export default {
   //   })
   // },
   methods: {
-    getUserInfo () {
-      this.isLogin = false
-      let self = this
-      let claims = localStorage.getItem('claims')
-      console.log(claims)
+    getUserInfo() {
+      this.isLogin = false;
+      let self = this;
+      let claims = localStorage.getItem("claims");
+      console.log(claims);
       if (claims) {
-        self.$axios.get('/api/v1/auth/getUserInfo', {
-          headers: {
-            authorization: 'Bearer ' + claims
-          }
-        }).then(function (response) {
-          if (response.data.status === '0000') {
-            console.log(response.data)
-            self.userInfo = response.data.userInfo
-            self.isLogin = true
-            // this.$store.commit('login')
-            console.log(self.userInfo)
-          }
-        }).catch(function (_error) {
-          console.log(_error)
-        })
+        self.$axios
+          .get("/api/v1/auth/getUserInfo", {
+            headers: {
+              authorization: "Bearer " + claims
+            }
+          })
+          .then(function(response) {
+            if (response.data.status === "0000") {
+              console.log(response.data);
+              self.userInfo = response.data.userInfo;
+              self.isLogin = true;
+              // this.$store.commit('login')
+              console.log(self.userInfo);
+            }
+          })
+          .catch(function(_error) {
+            console.log(_error);
+          });
       }
     },
-    handleSelect (key, keyPath) {
+    handleSelect(key, keyPath) {
       if (key !== null) {
-        this.$router.push(key)
+        this.$router.push(key);
       }
       // console.log(key, keyPath)
     },
-    loginout () {
+    loginout() {
       // let self = this
-      localStorage.removeItem('claims')
+      localStorage.removeItem("claims");
       // console.log(self.username)
-      this.getUserInfo()
+      this.getUserInfo();
     },
-    login () {
-      this.getUserInfo()
+    login() {
+      this.getUserInfo();
     },
-    reload () {
-      this.getUserInfo()
+    reload() {
+      this.getUserInfo();
     }
   },
-  created: function () {
+  created: function() {
     // this.getUserInfo()
   }
-}
+};
 </script>
 
 <style scoped>
@@ -133,7 +143,7 @@ export default {
   top: 50%;
   width: 8em;
   margin-top: -2.5em;
-  background-color: #B3C0D1;
+  background-color: #b3c0d1;
   color: #333;
   line-height: 60px;
 }
@@ -152,32 +162,32 @@ export default {
   text-align: center;
 }
 
-  /*.el-header, .el-footer {*/
-  /*  background-color: #B3C0D1;*/
-  /*  color: #333;*/
-  /*  text-align: center;*/
-  /*  line-height: 60px;*/
-  /*}*/
-  /*.el-aside {*/
-  /*  background-color: #D3DCE6;*/
-  /*  color: #333;*/
-  /*  text-align: center;*/
-  /*  line-height: 200px;*/
-  /*}*/
-  /*.el-main {*/
-  /*  background-color: #E9EEF3;*/
-  /*  color: #333;*/
-  /*  text-align: center;*/
-  /*  line-height: 160px;*/
-  /*}*/
-  /*body > .el-container {*/
-  /*  margin-bottom: 40px;*/
-  /*}*/
-  /*.el-container:nth-child(5) .el-aside,*/
-  /*.el-container:nth-child(6) .el-aside {*/
-  /*  line-height: 260px;*/
-  /*}*/
-  /*.el-container:nth-child(7) .el-aside {*/
-  /*  line-height: 320px;*/
-  /*}*/
+/*.el-header, .el-footer {*/
+/*  background-color: #B3C0D1;*/
+/*  color: #333;*/
+/*  text-align: center;*/
+/*  line-height: 60px;*/
+/*}*/
+/*.el-aside {*/
+/*  background-color: #D3DCE6;*/
+/*  color: #333;*/
+/*  text-align: center;*/
+/*  line-height: 200px;*/
+/*}*/
+/*.el-main {*/
+/*  background-color: #E9EEF3;*/
+/*  color: #333;*/
+/*  text-align: center;*/
+/*  line-height: 160px;*/
+/*}*/
+/*body > .el-container {*/
+/*  margin-bottom: 40px;*/
+/*}*/
+/*.el-container:nth-child(5) .el-aside,*/
+/*.el-container:nth-child(6) .el-aside {*/
+/*  line-height: 260px;*/
+/*}*/
+/*.el-container:nth-child(7) .el-aside {*/
+/*  line-height: 320px;*/
+/*}*/
 </style>
