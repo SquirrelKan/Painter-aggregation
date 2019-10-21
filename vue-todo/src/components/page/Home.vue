@@ -59,7 +59,7 @@
 <script>
 // import { mapState } from 'vuex'
 export default {
-  name: "Name",
+  name: "Home",
   provide: function() {
     return {
       reload: this.reload,
