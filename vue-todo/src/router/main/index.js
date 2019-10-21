@@ -1,62 +1,51 @@
-import Main from '@/components/Main'
-import Home from '@/components/Home'
-import Paint from '@/components/Paint'
-import Artworks from '@/components/Artworks'
-import About from '@/components/About'
-import Projects from '@/components/Projects'
-import Login from '@/components/Login'
-import Register from '@/components/Register'
-import User from '@/components/User'
-import AccoutInfo from '@/components/AccoutInfo'
-import ProjectsInfo from '@/components/ProjectsInfo'
 export default {
   path: '/',
-  component: Main,
+  component: () => import( /* webpackChunkName: "Home" */ '@/components/page/Home'),
   meta: {
     title: '首頁 - 繪師集'
   },
   children: [{
     path: '',
-    name: 'Home',
+    name: 'Main',
     meta: {
       title: '首頁 - 繪師集'
     },
-    component: Home
+    component: () => import( /* webpackChunkName: "Main" */ '@/components/page/Main')
   }, {
     path: '/paint',
     name: 'Paint',
     meta: {
       title: '繪師 - 繪師集'
     },
-    component: Paint
+    component: () => import( /* webpackChunkName: "Paint" */ '@/components/page/Paint')
   }, {
     path: '/artworks',
     name: 'Artworks',
     meta: {
       title: '作品集 - 繪師集'
     },
-    component: Artworks
+    component: () => import( /* webpackChunkName: "Artworks" */ '@/components/page/Artworks')
   }, {
     path: '/projects',
     name: 'Projects',
     meta: {
       title: '企劃列表 - 繪師集'
     },
-    component: Projects
+    component: () => import( /* webpackChunkName: "Projects" */ '@/components/page/Projects')
   }, {
     path: '/projects/:pid',
     name: 'ProjectsInfo',
     meta: {
       title: '企劃列表 - 繪師集'
     },
-    component: ProjectsInfo
+    component: () => import( /* webpackChunkName: "ProjectsInfo" */ '@/components/page/ProjectsInfo')
   }, {
     path: '/about',
     name: 'About',
     meta: {
       title: '關於我們 - 繪師集'
     },
-    component: About
+    component: () => import( /* webpackChunkName: "About" */ '@/components/page/About')
   }, {
     path: '/login',
     name: 'Login',
@@ -64,7 +53,7 @@ export default {
       title: '登入',
       isLogin: false
     },
-    component: Login
+    component: () => import( /* webpackChunkName: "Login" */ '@/components/page/Login')
   }, {
     path: '/register',
     name: 'Register',
@@ -72,7 +61,7 @@ export default {
       title: '註冊',
       isLogin: false
     },
-    component: Register
+    component: () => import( /* webpackChunkName: "Register" */ '@/components/page/Register')
   }, {
     path: '/user/:pid',
     name: 'User',
@@ -80,7 +69,7 @@ export default {
       title: '個人主頁',
       isLogin: false
     },
-    component: User
+    component: () => import( /* webpackChunkName: "User" */ '@/components/page/User')
   }, {
     path: '/accoutinfo',
     name: 'AccoutInfo',
@@ -88,6 +77,6 @@ export default {
       title: '帳號設定',
       isLogin: false
     },
-    component: AccoutInfo
+    component: () => import( /* webpackChunkName: "AccoutInfo" */ '@/components/page/AccoutInfo')
   }]
 }
