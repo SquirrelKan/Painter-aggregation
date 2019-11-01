@@ -49,9 +49,22 @@ export default {
       },
       rules: {
         username: [
-          { required: true, message: "請輸入帳號", trigger: "blur" },
-          { min: 1, max: 50, message: "帳號在50個字以內", trigger: "blur" },
-          { pattern: /^\S+$/, message: "不允許有空格", trigger: "blur" }
+          {
+            required: true,
+            message: "請輸入帳號",
+            trigger: "blur"
+          },
+          {
+            min: 1,
+            max: 50,
+            message: "帳號在50個字以內",
+            trigger: "blur"
+          },
+          {
+            pattern: /^\S+$/,
+            message: "不允許有空格",
+            trigger: "blur"
+          }
         ],
         password: [
           {
@@ -89,7 +102,9 @@ export default {
               // this.reload()
               // this.getuserinfo()
               // this.$store.commit('login')
-              self.$router.push({ name: "Home" });
+              self.$router.push({
+                name: "Main"
+              });
             } else {
               self.$message({
                 showClose: true,
@@ -115,7 +130,9 @@ export default {
   created: function() {
     let claims = localStorage.getItem("claims");
     if (claims) {
-      this.$router.push({ name: "Home" });
+      this.$router.push({
+        name: "Main"
+      });
     }
   }
 };
@@ -131,16 +148,20 @@ export default {
 .el-aside {
   color: #333;
 }
+
 .el-row {
   margin-bottom: 20px;
 }
+
 .el-col {
   border-radius: 4px;
 }
+
 .grid-content {
   border-radius: 4px;
   min-height: 36px;
 }
+
 .row-bg {
   padding: 10px 0;
   background-color: #f9fafc;

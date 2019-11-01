@@ -113,49 +113,49 @@ export default {
       checkList: ["选中且禁用", "商業企劃"],
       datavalue: 0,
       projects: [
-        {
-          value: "選項1",
-          label: "發布時間"
-        },
-        {
-          value: "選項2",
-          label: "稿酬預算"
-        },
-        {
-          value: "選項3",
-          label: "雇主信譽"
-        },
-        {
-          value: "選項4",
-          label: "應徵人數"
-        }
+        // {
+        //   value: "選項1",
+        //   label: "發布時間"
+        // },
+        // {
+        //   value: "選項2",
+        //   label: "稿酬預算"
+        // },
+        // {
+        //   value: "選項3",
+        //   label: "雇主信譽"
+        // },
+        // {
+        //   value: "選項4",
+        //   label: "應徵人數"
+        // }
       ],
       value: "",
       projectsInfo: [
-        {
-          pid: 1,
-          name: "風滅",
-          date: "2019-09-02",
-          use: "其他·插图"
-        },
-        {
-          pid: 2,
-          name: "風滅",
-          date: "2019-09-02",
-          use: "其他·插图"
-        },
-        {
-          pid: 3,
-          name: "風滅",
-          date: "2019-09-02",
-          use: "其他·插图"
-        },
-        {
-          pid: 4,
-          name: "風滅",
-          date: "2019-09-02",
-          use: "其他·插图"
-        }
+        // {
+          // pid: 1,
+        //   name: "風滅",
+        //   date: "2019-09-02",
+        //   use: "其他·插图"
+        // },
+        // {
+        //   pid: 2,
+        //   name: "風滅",
+        //   date: "2019-09-02",
+        //   use: "其他·插图"
+        // },
+        // {
+        //   pid: 3,
+        //   name: "風滅",
+        //   date: "2019-09-02",
+        //   use: "其他·插图"
+        // },
+        // {
+        //   pid: 4,
+        //   name: "風滅",
+        //   date: "2019-09-02",
+        //   use: "其他·插图"
+        // }
       ]
     };
   },
@@ -170,9 +170,9 @@ export default {
           //       console.log(response.data.data)
           //console.log(self.projects)
           self.tempList = [];
-          for (var i = 0; i < self.pageSize; i++) {
-            self.tempList.push(self.projects[i]);
-          }
+          // for (var i = 0; i < self.pageSize; i++) {
+          //   self.tempList.push(self.projects[i]);
+          // }
         })
         .catch(function(_error) {
           console.log(_error);
