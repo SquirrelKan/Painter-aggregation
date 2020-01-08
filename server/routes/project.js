@@ -4,7 +4,7 @@ var router = express.Router()
 const jwt = require('jsonwebtoken')
 const SECRET_KEY = require('../config/config').SECRET_KEY
 
-router.get('/getProjects',function(req,res){
+router.get('/getProjects', function (req, res) {
   // console.log('test')
   let sql = `SELECT proposal.user_id                 AS userid, 
                 projects.projects_id             AS projects_id, 
@@ -29,25 +29,23 @@ router.get('/getProjects',function(req,res){
                    ON(( projects.use_id = project_use.project_use_id ))) 
                 JOIN class 
                   ON(( projects.class_id = class.class_id ))) `
-  
-  req.query(sql,function(error ,results , fields){
-    
-      if(error){
-        console.log(error)
-      }
-      return res.send({
-        status: '0000',
-        message: 'get paintdata',
-        data: {
+
+  req.query(sql, function (error, results, fields) {
+
+    if (error) {
+      console.log(error)
+    }
+    return res.send({
+      status: '0000',
+      message: 'get paintdata',
+      data: {
         projects: results
-      }      
+      }
     })
-  
+
   })
 })
 
-
-
 console.log('Project載入完成')
 //---
-module.exports=router
+module.exports = router
