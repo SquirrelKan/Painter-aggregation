@@ -29,7 +29,7 @@ router.get('/getProjects', function (req, res) {
                    ON(( projects.use_id = project_use.project_use_id ))) 
                 JOIN class 
                   ON(( projects.class_id = class.class_id ))) `
-
+  sql=`call rsGetProposalList()`
   req.query(sql, function (error, results, fields) {
 
     if (error) {
@@ -39,7 +39,7 @@ router.get('/getProjects', function (req, res) {
       status: '0000',
       message: 'get paintdata',
       data: {
-        projects: results
+        projects: results[0]
       }
     })
 

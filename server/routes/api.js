@@ -7,9 +7,7 @@ router.post('/account', function (req, res) {
 
 router.get('/getPaint', function (req, res) {
   // body...
-  let sql = `SELECT nickname,icon,painter_id AS pid,userid,memberdata.joinDate AS joindate 
-    FROM (memberdata JOIN painter ON ((memberdata.userid = painter.user_id)))`
-  sql = `call rsGetPaint()`
+  let sql = `call rsGetPaint()`
   // console.log(sql)
   req.query(sql, function (error, results, fields) {
     if (error) {

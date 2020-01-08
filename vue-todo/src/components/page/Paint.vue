@@ -38,7 +38,7 @@
               </el-col>
               <el-col :span="1">全部</el-col>
               <el-col :span="1" v-for="(item, index) in styleDatas" :key="index">
-                <span>{{ item.name }}</span>
+                <span><a href=""></a>{{ item.name }}</span>
               </el-col>
             </el-row>
             <el-row>
