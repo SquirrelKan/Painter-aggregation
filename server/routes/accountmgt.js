@@ -15,7 +15,7 @@ router.get('/getAccountInfo', function (req, res, next) {
       })
     }
     let userInfo = decoded.userInfo
-    let sql = `SELECT username,realname ,nickname, icon,birthday,email,phone,address FROM memberdata WHERE username = '${userInfo.username}'`
+    let sql = `call rsGetAccount('${userInfo.username}')`
     // console.log(sql)
     // req.connect()
     req.query(sql, function (error, results, fields) {
@@ -28,7 +28,7 @@ router.get('/getAccountInfo', function (req, res, next) {
       return res.send({
         status: '0000',
         message: 'getaccountinfo token',
-        userInfo: results[0]
+        userInfo: results[0][0]
       })
     })
     // req.end()
@@ -40,15 +40,16 @@ router.post('/updateAccountInfo', function (req, res) {
   console.log(req.body)
   let updateInfo = req.body.updateInfo
   let sql = `UPDATE memberdata SET 
-  realname='${updateInfo.realname}' , 
-  nickname = '${updateInfo.nickname}' ,
-  icon = '${updateInfo.icon}',
-  email = '${updateInfo.email}',
-  phone = '${updateInfo.phone}',
-  birthday = '${updateInfo.birthday}',
-  address = '${updateInfo.address}'
-  WHERE username ='${updateInfo.username}'
+  '${updateInfo.username}',
+  '${updateInfo.realname}' , 
+  '${updateInfo.nickname}' ,
+  '${updateInfo.icon}',
+  '${updateInfo.email}',
+  '${updateInfo.phone}',
+  '${updateInfo.birthday}',
+  '${updateInfo.address}'
   `
+sql=`call rsUpdateAccountInfo('${updateInfo.username}','${updateInfo.realname}','${updateInfo.nickname}','${updateInfo.icon}','${updateInfo.email}','${updateInfo.cellphone}','${updateInfo.birthday}','${updateInfo.address}')`
   req.query(sql, function (error, results, fields) {
     if (error) {
       console.log()

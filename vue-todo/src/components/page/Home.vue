@@ -13,7 +13,7 @@
           <el-menu-item index="/">首頁</el-menu-item>
         </el-col>
         <el-col :span="1" :offset="0">
-          <el-menu-item index="/paint">繪師</el-menu-item>
+          <el-menu-item index="/paintInfo">繪師</el-menu-item>
         </el-col>
         <el-col :span="1" :offset="0">
           <el-menu-item index="/projects">企劃</el-menu-item>
@@ -111,7 +111,7 @@ export default {
           });
       }
     },
-    handleSelect(key, keyPath) {
+    handleSelect(key, keyPath) { // eslint-disable-line no-unused-vars
       if (key !== null) {
         this.$router.push(key);
       }

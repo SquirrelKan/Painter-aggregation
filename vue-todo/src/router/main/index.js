@@ -1,3 +1,4 @@
+/* eslint-disable */
 export default {
   path: '/',
   component: () => import( /* webpackChunkName: "Home" */ '@/components/page/Home'),
@@ -12,12 +13,12 @@ export default {
     },
     component: () => import( /* webpackChunkName: "Main" */ '@/components/page/Main')
   }, {
-    path: '/paint',
+    path: '/PaintInfo',
     name: 'Paint',
     meta: {
       title: '繪師 - 繪師集'
     },
-    component: () => import( /* webpackChunkName: "Paint" */ '@/components/page/Paint')
+    component: () => import( /* webpackChunkName: "PaintInfo" */ '@/components/page/PaintInfo')
   }, {
     path: '/artworks',
     name: 'Artworks',
@@ -63,7 +64,7 @@ export default {
     },
     component: () => import( /* webpackChunkName: "Register" */ '@/components/page/Register')
   }, {
-    path: '/user/:pid',
+    path: '/user/:id',
     name: 'User',
     meta: {
       title: '個人主頁',

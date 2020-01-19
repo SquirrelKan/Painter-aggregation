@@ -23,12 +23,30 @@ router.get('/getPaint', function (req, res) {
   })
 })
 
+router.get('/getStyle', function (req, res) {
+  // body...
+  let sql = `call rsGetStyle('${0}')`
+  // console.log(sql)
+  req.query(sql, function (error, results, fields) {
+    if (error) {
+      console.log(error)
+    }
+    return res.send({
+      status: '0000',
+      message: 'get style',
+      data: {
+        StyleDate: results[0]
+      }
+    })
+  })
+})
+
 router.post('/getUserInfo', function (req, res) {
-  let todo = {
+  let userData = {
     username: req.body.username
   }
-  let sql = `SELECT username FROM memberdata WHERE username= '${todo.username}'`
-  sql = `call rsGetUserInfo('${todo.username}')`
+  let sql = `SELECT username FROM memberdata WHERE username= '${userData.username}'`
+  sql = `call rsGetUserInfo('${userData.username}')`
   console.log(sql)
   req.query(sql, function (error, results, fields) {
     if (error) {

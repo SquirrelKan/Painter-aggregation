@@ -36,15 +36,16 @@
               <el-col :span="2">
                 <span>風格:</span>
               </el-col>
-              <el-col :span="1">全部</el-col>
               <el-col :span="1" v-for="(item, index) in styleDatas" :key="index">
-                <span><a href=""></a>{{ item.name }}</span>
+                <span>
+                  <a>{{ item.name }}</a>
+                </span>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="4">依繪師名稱搜尋</el-col>
               <el-col :span="4">
-                <el-input v-model="input"></el-input>
+                <el-input v-model="filter_name"></el-input>
               </el-col>
               <el-col :span="4">
                 <el-button icon="el-icon-search">搜尋</el-button>
@@ -52,13 +53,13 @@
             </el-row>
           </div>
         </el-card>
-        <el-card class="paintInfo-card" v-for="(paintInfo, index) in tempList" :key="index">
+        <el-card class="paintInfo-card" v-for="(paintInfo, index) in filter_rows()" :key="index">
           <!--<el-card class="paintInfo-card"">-->
           <div slot="header" class="clearfix">
             <el-row>
               <el-col :span="2">
                 <div class="grid-content bg-purple">
-                  <router-link :to="{name:'User', params: { pid:  paintInfo.nickname}}">
+                  <router-link :to="{name:'User', params: { id: paintInfo.id}}">
                     <el-image
                       style="width: 60px; height: 60px"
                       :src="paintInfo.icon"
@@ -133,10 +134,10 @@ export default {
   delimiters: ["${", "}"],
   data() {
     return {
-      input: "",
+      filter_name: "",
       paintInfos: [
         {
-          pid: "1",
+          id: "1",
           nickname: "風滅",
           icon: "https://s25.postimg.cc/98r2cyxdr/moe10.png",
           rate: 3,
@@ -152,7 +153,7 @@ export default {
           ]
         },
         {
-          pid: "2",
+          id: "2",
           nickname: "奏夜",
           icon: "https://s25.postimg.cc/qysqxzg3j/moe9.png",
           rate: 5,
@@ -185,6 +186,12 @@ export default {
     this.currentChangePage(this.paintInfos, this.currentPage);
   },
   methods: {
+    getStyle() {
+      let self = this;
+      self.$axios.get("/api/v1/getStyle", {}).then(function(response) {
+        self.styleDatas = response.data.data.StyleDate;
+      });
+    },
     getPaint() {
       let self = this;
       self.$axios
@@ -194,7 +201,8 @@ export default {
           self.paintInfos = response.data.data.paints;
           self.tempList = [];
           for (var i = 0; i < self.pageSize; i++) {
-            self.tempList.push(self.paintInfos[i]);
+            if (i < self.paintInfos.length)
+              self.tempList.push(self.paintInfos[i]);
           }
         })
         .catch(function(_error) {
@@ -221,11 +229,20 @@ export default {
           this.tempList.push(list[from]);
         }
       }
+    },
+    filter_rows: function() {
+      var filter_name = this.filter_name;
+      return filter_name !== ""
+        ? this.paintInfos.filter(searchResult => {
+            return searchResult.nickname.indexOf(filter_name).length < 1;
+          })
+        : this.paintInfos;
     }
   },
   created: function() {
     // let self = this
     // this.handleSizeChange()
+    this.getStyle();
     this.getPaint();
     // console.log(self.paintInfos)
     // console.log('test' + self.classDatas)

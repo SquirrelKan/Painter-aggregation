@@ -2,7 +2,8 @@
   <div>
     <el-collapse v-model="activeNames" @change="handleChange">
       <el-collapse-item title="個人資料設定" name="1">
-        <el-form ref="updateInfo" :model="updateInfo" label-width="120px">
+        {{updateInfo[0]}}
+        <el-form ref="updateInfo" v-model="updateInfo" label-width="120px">
           <el-form-item label="真實姓名">
             <!--<el-input v-if="updateInfo.realname===''" v-model="updateInfo.name" ></el-input>-->
             <el-input v-model="updateInfo.realname" :disabled="isrealname"></el-input>
@@ -11,7 +12,7 @@
             <el-input v-model="updateInfo.nickname"></el-input>
           </el-form-item>
           <el-form-item label="手機">
-            <el-input v-model="updateInfo.phone"></el-input>
+            <el-input v-model="updateInfo.cellphone"></el-input>
           </el-form-item>
           <el-form-item label="email">
             <el-input v-model="updateInfo.email"></el-input>
@@ -64,6 +65,7 @@
 </template>
 
 <script>
+import moment from "moment"
 export default {
   data() {
     return {
@@ -78,7 +80,7 @@ export default {
         realname: "",
         nickname: "",
         email: "",
-        phone: "",
+        cellphone: "",
         birthday: "",
         icon: "",
         address: ""
@@ -98,23 +100,26 @@ export default {
     onSubmit() {
       this.dialogVisible = true;
       if (!this.isrealname) {
-        this.updateInfo.realname = this.updateInfo.realname;
+        this.userInfo.realname = this.updateInfo.realname;
       }
       if (!this.isbirthday) {
-        this.updateInfo.birthday = this.updateInfo.birthday;
+        this.userInfo.birthday = this.updateInfo.birthday;
       }
+      
       // console.log('submit!')
     },
     sendData() {
       let self = this;
       let claims = localStorage.getItem("claims");
       this.dialogVisible = false;
+      var sendData=this.updateInfo
+      sendData.birthday=moment(new Date(sendData.birthday)).format('YYYY-MM-DD')
       self.$axios
         .post("/api/v1/accountmgt/updateAccountInfo", {
           headers: {
             authorization: "Bearer " + claims
           },
-          updateInfo: self.updateInfo
+          updateInfo: sendData
         })
         .then(function(response) {
           let data = response.data;
@@ -146,7 +151,7 @@ export default {
     formatTime(time) {
       this.createdate = time;
     },
-    handleSubmit(val) {},
+    handleSubmit(val) {}, // eslint-disable-line no-unused-vars
     handleChange(val) {
       console.log(val);
     }
@@ -167,6 +172,7 @@ export default {
       .then(function(response) {
         // response
         if (response.data.status === "0000") {
+          console.log("test",response.data)
           self.userInfo = response.data.userInfo;
           self.updateInfo = response.data.userInfo;
           if (self.updateInfo.birthday) {
@@ -175,12 +181,12 @@ export default {
           if (self.updateInfo.realname) {
             self.isrealname = true;
           }
-          // console.log(self.userInfo)
+          console.log(self.userInfo)
         }
       })
       .catch(function(_error) {
         console.log(_error);
-      });
+      }); 
   }
 };
 </script>

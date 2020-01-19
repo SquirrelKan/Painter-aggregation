@@ -39,7 +39,7 @@ router.get('/getUserInfo', function (req, res, next) {
 })
 
 router.post('/getUserInfo', function (req, res) {
-  let sql = `SELECT username FROM  memberdata WHERE username = '${req.body.username}'`
+  let sql = `SELECT username FROM  member WHERE username = '${req.body.username}'`
   req.query(sql, function (error, results, fields) {
     if (error) {
       console.log(error)
@@ -69,14 +69,15 @@ router.post('/login', function (req, res) {
     password: req.body.password
   }
   // console.log(req.body)
-  let sql = `SELECT username,nickName, password, identity_name FROM  (memberdata JOIN identity ON ((memberdata.identityid = identity.identity_id))) WHERE username='${todo.username}' AND password='${todo.password}'`
+  let sql = `SELECT username,nickname, password, identity_name FROM  (memberdata JOIN identity ON ((memberdata.identityid = identity.identity_id))) WHERE username='${todo.username}' AND password='${todo.password}'`
+  sql = `call rsGetLoginData('${todo.username}','${todo.password}')`
   // console.log(sql)
   req.query(sql, function (error, results, fields) {
     if (error) {
       console.log(error)
       throw error
     }
-    if (results.length == 0) {
+    if (results[0].length == 0) {
       console.log(todo.username + ' login error')
       return res.send({
         status: '0001',
@@ -84,33 +85,28 @@ router.post('/login', function (req, res) {
       })
     }
     // data= {data}
-    // console.log(data.data[0].user_name)
+    // console.log(results[0])
+    let userinfo = JSON.parse(JSON.stringify(results[0][0]))
 
-    let userinfo = {
-      username: results[0].username,
-      nickname: results[0].nickName,
-      identity: results[0].identity_name
-    }
-
-    console.log(userinfo)
+    // console.log(userinfo)
     const claims = jwt.sign({
       userInfo: userinfo
     }, SECRET_KEY, {
-      expiresIn: 60 * 60 * 24
+      expiresIn: 60 * 60 * 1
     })
-    console.log(todo.account + ' login success')
+    console.log(todo.username + ' login success')
     return res.send({
       status: '0000',
       claims: claims,
       message: 'login success',
-      data: req.body
+      data: userinfo
     })
   })
 })
 
 router.post('/register', function (req, res) {
   let todo = {
-    nickName: req.body.nickName,
+    nickname: req.body.nickname,
     username: req.body.username,
     email: req.body.email,
     password: req.body.password,
@@ -135,7 +131,7 @@ router.post('/register', function (req, res) {
     console.log(todo.username + ' register success')
     let userinfo = {
       username: req.body.username,
-      nickname: req.body.nickName,
+      nickname: req.body.nickname,
       identity: req.body.identity_name === 2 ? ('paint') : (req.body.identity_name === 1 ? ('admin') : ('p'))
     }
     const claims = jwt.sign({
