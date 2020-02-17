@@ -51,12 +51,18 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
   extended: false
 }))
-app.use('/api/v1', api)
-app.use('/api/v1/common', common)
-app.use('/api/v1/auth', authRoute)
-app.use('/api/v1/accountmgt', accountmgtRoute)
-app.use('/api/v1/arkwork', arkwork)
-app.use('/api/v1/project', project)
+
+try {
+  app.use('/api/v1', api)
+  app.use('/api/v1/common', common)
+  app.use('/api/v1/auth', authRoute)
+  app.use('/api/v1/accountmgt', accountmgtRoute)
+  app.use('/api/v1/arkwork', arkwork)
+  app.use('/api/v1/project', project)
+} catch (error) {
+  console(error)
+}
+
 
 app.listen(8090, function () {
   console.log('Example app listening on port 8090!')

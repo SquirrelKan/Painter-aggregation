@@ -70,7 +70,7 @@ router.post('/login', function (req, res) {
   }
   // console.log(req.body)
   let sql = `SELECT username,nickname, password, identity_name FROM  (memberdata JOIN identity ON ((memberdata.identityid = identity.identity_id))) WHERE username='${todo.username}' AND password='${todo.password}'`
-  sql = `call rsGetLoginData('${todo.username}','${todo.password}')`
+  sql = `rsGetLoginData('${todo.username}','${todo.password}')`
   // console.log(sql)
   req.query(sql, function (error, results, fields) {
     if (error) {

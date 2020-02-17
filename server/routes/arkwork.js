@@ -2,7 +2,7 @@ var express = require('express')
 var router = express.Router()
 
 router.get('/getArtwork', function (req, res) {
-    let sql = `CALL rsGetArtwork()`
+    let sql = `rsGetArtwork()`
     req.query(sql, function (error, results, fields) {})
     console.log('test')
 })

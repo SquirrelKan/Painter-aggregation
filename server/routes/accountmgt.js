@@ -15,7 +15,7 @@ router.get('/getAccountInfo', function (req, res, next) {
       })
     }
     let userInfo = decoded.userInfo
-    let sql = `call rsGetAccount('${userInfo.username}')`
+    let sql = `rsGetAccount('${userInfo.username}')`
     // console.log(sql)
     // req.connect()
     req.query(sql, function (error, results, fields) {
@@ -49,7 +49,7 @@ router.post('/updateAccountInfo', function (req, res) {
   '${updateInfo.birthday}',
   '${updateInfo.address}'
   `
-sql=`call rsUpdateAccountInfo('${updateInfo.username}','${updateInfo.realname}','${updateInfo.nickname}','${updateInfo.icon}','${updateInfo.email}','${updateInfo.cellphone}','${updateInfo.birthday}','${updateInfo.address}')`
+sql=`rsUpdateAccountInfo('${updateInfo.username}','${updateInfo.realname}','${updateInfo.nickname}','${updateInfo.icon}','${updateInfo.email}','${updateInfo.cellphone}','${updateInfo.birthday}','${updateInfo.address}')`
   req.query(sql, function (error, results, fields) {
     if (error) {
       console.log()

@@ -14,9 +14,10 @@ var query = function (sql, options, callback) {
         callback = options
         options = undefined
     }
+    var left=sql
     pool.getConnection(function (err, conn) {
         if (err) {
-            callback(err, null, null)
+            throw err
         } else {
             conn.query(sql, options, function (err, results, fields) {
                 // callback
@@ -27,6 +28,20 @@ var query = function (sql, options, callback) {
     })
 }
 
+
+var callSp = function (spName, param) {
+    let spQuery = `CALL ??(??)`
+
+    this.length.toExponential(spQuery, [spName], [param])
+    pool.query(query, (err, result) => {
+        if (err) {
+            console.error(err);
+            return;
+        }
+        // rows from SP
+        console.log(result);
+    });
+}
 // var query = function (sql, param, options, callback) {
 //     // console.log(sql, options ,callback)
 //     if (typeof options === "function") {
@@ -46,5 +61,5 @@ var query = function (sql, options, callback) {
 //     })
 // }
 
-console.log('sqlpool載入完成')
+console. log('sqlpool載入完成')
 module.exports = query

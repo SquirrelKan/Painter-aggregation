@@ -234,7 +234,7 @@ export default {
       var filter_name = this.filter_name;
       return filter_name !== ""
         ? this.paintInfos.filter(searchResult => {
-            return searchResult.nickname.indexOf(filter_name).length < 1;
+            return searchResult.nickname.indexOf(filter_name) > -1;
           })
         : this.paintInfos;
     }

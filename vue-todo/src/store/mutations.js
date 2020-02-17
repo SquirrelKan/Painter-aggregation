@@ -4,5 +4,6 @@ export default {
   },
   decrease (state, payload) {
     state.isLogin = false
+    state.payload = payload
   }
 }

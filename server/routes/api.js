@@ -12,9 +12,9 @@ router.get('/getPaint', function (req, res) {
   req.query(sql, function (error, results, fields) {
     if (error) {
       console.log(error)
+      return res.status(400).send()
     }
-    return res.send({
-      status: '0000',
+    return res.status(200).send({
       message: 'get paintdata',
       data: {
         paints: results[0]

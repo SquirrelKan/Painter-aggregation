@@ -4,7 +4,7 @@ var router = express.Router()
 
 router.get('/getGenre', function (req, res) {
     id = req.body.id === undefined || req.body.id === '' ? 0 : req.body.id;
-    let sql = `call rsGetGenre('${id}')`
+    let sql = `rsGetGenre('${id}')`
     console.log(sql);
     req.query(sql, function (error, results, fields) {
         if (error) {
@@ -22,7 +22,7 @@ router.get('/getGenre', function (req, res) {
 
 router.get('/getStyle', function (req, res) {
     id = req.body.id === undefined || req.body.id === '' ? 0 : req.body.id;
-    let sql = `call rsGetStyle('${id}')`
+    let sql = `rsGetStyle('${id}')`
     //console.log(sql);
     req.query(sql, function (error, results, fields) {
         if (error) {

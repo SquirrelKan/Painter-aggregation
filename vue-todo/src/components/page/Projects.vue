@@ -55,11 +55,15 @@
             <router-link :to="{name:'ProjectsInfo', params: { pid: item.projects_id}}">
               <el-card class="box-card">
                 <el-row>
-                  <!--{{ item }}-->
-                  <!--{{item.userid}}-->
-                  {{item.projects_name}}
-                  <br />
-                  發布於{{ item.release_time }}
+                  <el-col>
+                    <span>{{item.projects_name}}</span>
+                    <el-button style="float: right; padding: 3px 0" type="text">
+                      {{item.lower_price}} ~ {{item.upper_price}}
+                      <span>NTD/張</span>
+                    </el-button>
+                    <el-divider></el-divider>
+                    發布於{{ item.release_time }}
+                  </el-col>
                 </el-row>
                 <el-row>{{item.date}}</el-row>
                 <el-row>
@@ -81,6 +85,12 @@
                   <el-col :span="6">
                     應徵人數
                     <br />
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col>
+                    詳細摘要
+                    <span style="font-size: 12px;">{{item.summary}}</span>
                   </el-col>
                 </el-row>
               </el-card>
@@ -133,7 +143,7 @@ export default {
       value: "",
       projectsInfo: [
         // {
-          // pid: 1,
+        // pid: 1,
         //   name: "風滅",
         //   date: "2019-09-02",
         //   use: "其他·插图"
