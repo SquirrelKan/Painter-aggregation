@@ -29,7 +29,7 @@ router.get('/getProjects', function (req, res) {
                    ON(( projects.use_id = project_use.project_use_id ))) 
                 JOIN class 
                   ON(( projects.class_id = class.class_id ))) `
-  sql = `call rsGetProposalList()`
+  sql = `rsGetProposalList`
   req.query(sql, function (error, results, fields) {
 
     if (error) {

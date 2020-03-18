@@ -7,7 +7,7 @@ router.post('/account', function (req, res) {
 
 router.get('/getPaint', function (req, res) {
   // body...
-  let sql = `call rsGetPaint()`
+  let sql = `rsGetPaint`
   // console.log(sql)
   req.query(sql, function (error, results, fields) {
     if (error) {
@@ -25,9 +25,9 @@ router.get('/getPaint', function (req, res) {
 
 router.get('/getStyle', function (req, res) {
   // body...
-  let sql = `call rsGetStyle('${0}')`
+  let sql = `rsGetStyle`
   // console.log(sql)
-  req.query(sql, function (error, results, fields) {
+  req.query(sql, 0, function (error, results, fields) {
     if (error) {
       console.log(error)
     }
@@ -45,10 +45,9 @@ router.post('/getUserInfo', function (req, res) {
   let userData = {
     username: req.body.username
   }
-  let sql = `SELECT username FROM memberdata WHERE username= '${userData.username}'`
-  sql = `call rsGetUserInfo('${userData.username}')`
+  let sql = `rsGetUserInfo`
   console.log(sql)
-  req.query(sql, function (error, results, fields) {
+  req.query(sql, userData.username, function (error, results, fields) {
     if (error) {
       console.log(error)
     }

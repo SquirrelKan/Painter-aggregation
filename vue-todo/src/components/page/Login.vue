@@ -13,7 +13,7 @@
           label-width="100px"
         >
           <el-form-item label="帳號" prop="username">
-            <el-input v-model="submitForm.username" placeholder="請輸入帳號" autocomplete="off"></el-input>
+            <el-input v-model="submitForm.account" placeholder="請輸入帳號" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item label="密碼" prop="password">
             <el-input
@@ -44,11 +44,11 @@ export default {
     return {
       isLogin: false,
       submitForm: {
-        username: "",
+        account: "",
         password: ""
       },
       rules: {
-        username: [
+        account: [
           {
             required: true,
             message: "請輸入帳號",
@@ -86,7 +86,7 @@ export default {
       if (self.submitForm.username !== "" && self.submitForm.password !== "") {
         self.$axios
           .post("/api/v1/auth/login", {
-            username: self.submitForm.username,
+            account: self.submitForm.account,
             password: md5(self.submitForm.password)
           })
           .then(function(response) {

@@ -6,42 +6,64 @@ var pool = mysql.createPool({
     password: 'root',
     database: 'paintercol',
     connectionLimit: 10,
+    timezone: "08:00"
 })
 
-var query = function (sql, options, callback) {
-    // console.log(sql, options ,callback)
+var query = function (spName, options, callback) {
+    let spQuery = "CALL ??(?)"
     if (typeof options === "function") {
         callback = options
         options = undefined
+        spQuery = "CALL ??()"
+        pool.getConnection(function (err, conn) {
+            if (err) {
+                // throw err
+            } else {
+                conn.query(spQuery,spName, function (err, results, fields) {
+                    // callback
+                    callback(err, results, fields)
+                })
+                conn.release()
+            }
+        })
+    } else {
+        pool.getConnection(function (err, conn) {
+            // console.log(sql, param)
+            if (err) {
+                // throw err
+            } else {
+                conn.query(spQuery, [spName, options], function (err, results, fields) {
+                    // callback
+                    callback(err, results, fields)
+                })
+                conn.release()
+            }
+        })
     }
-    var left=sql
-    pool.getConnection(function (err, conn) {
-        if (err) {
-            throw err
-        } else {
-            conn.query(sql, options, function (err, results, fields) {
-                // callback
-                callback(err, results, fields)
-            })
-            conn.release()
-        }
-    })
+    // this.length.toExponential(spQuery, [sql], [param])
 }
 
+// var query = function (sql, options, callback) {
+//     // console.log(sql, options ,callback)
+//     if (typeof options === "function") {
+//         callback = options
+//         options = undefined
+//     }
+//     console.log(sql)
+//     pool.getConnection(function (err, conn) {
 
-var callSp = function (spName, param) {
-    let spQuery = `CALL ??(??)`
+//         if (err) {
+//             throw err
+//         } else {
+//             conn.query(sql, options, function (err, results, fields) {
+//                 // callback
+//                 callback(err, results, fields)
+//             })
+//             conn.release()
+//         }
+//     })
+// }
 
-    this.length.toExponential(spQuery, [spName], [param])
-    pool.query(query, (err, result) => {
-        if (err) {
-            console.error(err);
-            return;
-        }
-        // rows from SP
-        console.log(result);
-    });
-}
 // var query = function (sql, param, options, callback) {
 //     // console.log(sql, options ,callback)
 //     if (typeof options === "function") {
@@ -61,5 +83,5 @@ var callSp = function (spName, param) {
 //     })
 // }
 
-console. log('sqlpool載入完成')
+console.log('sqlpool載入完成')
 module.exports = query

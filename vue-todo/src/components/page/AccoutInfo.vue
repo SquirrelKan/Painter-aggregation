@@ -65,7 +65,7 @@
 </template>
 
 <script>
-import moment from "moment"
+import moment from "moment";
 export default {
   data() {
     return {
@@ -105,15 +105,17 @@ export default {
       if (!this.isbirthday) {
         this.userInfo.birthday = this.updateInfo.birthday;
       }
-      
+
       // console.log('submit!')
     },
     sendData() {
       let self = this;
       let claims = localStorage.getItem("claims");
       this.dialogVisible = false;
-      var sendData=this.updateInfo
-      sendData.birthday=moment(new Date(sendData.birthday)).format('YYYY-MM-DD')
+      var sendData = this.updateInfo;
+      sendData.birthday = moment(new Date(sendData.birthday)).format(
+        "YYYY-MM-DD"
+      );
       self.$axios
         .post("/api/v1/accountmgt/updateAccountInfo", {
           headers: {
@@ -128,7 +130,7 @@ export default {
             // localStorage.setItem('claims', response.data.claims)
             self.$message({
               showClose: true,
-              message: "恭喜妳，已成功更新",
+              message: "恭喜您，已成功更新",
               type: "success"
             });
             // this.reload()
@@ -172,7 +174,6 @@ export default {
       .then(function(response) {
         // response
         if (response.data.status === "0000") {
-          console.log("test",response.data)
           self.userInfo = response.data.userInfo;
           self.updateInfo = response.data.userInfo;
           if (self.updateInfo.birthday) {
@@ -181,12 +182,11 @@ export default {
           if (self.updateInfo.realname) {
             self.isrealname = true;
           }
-          console.log(self.userInfo)
         }
       })
       .catch(function(_error) {
         console.log(_error);
-      }); 
+      });
   }
 };
 </script>

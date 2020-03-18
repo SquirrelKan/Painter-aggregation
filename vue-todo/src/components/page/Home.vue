@@ -36,7 +36,9 @@
                 <el-dropdown-item>
                   <router-link to="/accoutinfo">個人資料</router-link>
                 </el-dropdown-item>
-                <el-dropdown-item>Action 2</el-dropdown-item>
+                <el-dropdown-item>
+                  <router-link to="/ForgetPassword">忘記密碼</router-link>
+                </el-dropdown-item>
                 <el-dropdown-item>Action 3</el-dropdown-item>
                 <el-dropdown-item>Action 4</el-dropdown-item>
                 <el-dropdown-item>Action 5</el-dropdown-item>
@@ -52,7 +54,7 @@
     </el-menu>
     <!--</el-header>-->
     <el-main>
-      <router-view></router-view>
+      <router-view v-bind:local="isLogin"></router-view>
     </el-main>
   </div>
 </template>
@@ -89,7 +91,7 @@ export default {
       this.isLogin = false;
       let self = this;
       let claims = localStorage.getItem("claims");
-      console.log(claims);
+      // console.log(claims);
       if (claims) {
         self.$axios
           .get("/api/v1/auth/getUserInfo", {
@@ -99,11 +101,11 @@ export default {
           })
           .then(function(response) {
             if (response.data.status === "0000") {
-              console.log(response.data);
+              // console.log(response.data);
               self.userInfo = response.data.userInfo;
               self.isLogin = true;
               // this.$store.commit('login')
-              console.log(self.userInfo);
+              // console.log(self.userInfo);
             }
           })
           .catch(function(_error) {
@@ -111,7 +113,7 @@ export default {
           });
       }
     },
-    handleSelect(key, keyPath) { // eslint-disable-line no-unused-vars
+    handleSelect(key, keyPath) {// eslint-disable-line no-unused-vars
       if (key !== null) {
         this.$router.push(key);
       }

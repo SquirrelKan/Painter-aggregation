@@ -39,8 +39,9 @@ router.get('/getUserInfo', function (req, res, next) {
 })
 
 router.post('/getUserInfo', function (req, res) {
-  let sql = `SELECT username FROM  member WHERE username = '${req.body.username}'`
-  req.query(sql, function (error, results, fields) {
+  let todo = [req.body.username]
+  let sql = 'rsGetUserInfo'
+  req.query(sql, todo, function (error, results, fields) {
     if (error) {
       console.log(error)
       throw error
@@ -64,21 +65,20 @@ router.post('/getUserInfo', function (req, res) {
 })
 
 router.post('/login', function (req, res) {
-  let todo = {
-    username: req.body.username,
-    password: req.body.password
-  }
-  // console.log(req.body)
-  let sql = `SELECT username,nickname, password, identity_name FROM  (memberdata JOIN identity ON ((memberdata.identityid = identity.identity_id))) WHERE username='${todo.username}' AND password='${todo.password}'`
-  sql = `rsGetLoginData('${todo.username}','${todo.password}')`
+  let todo = [
+    req.body.account,
+    req.body.password
+  ]
+  console.log(req.body)
+  let sql = 'rsGetLoginData'
   // console.log(sql)
-  req.query(sql, function (error, results, fields) {
+  req.query(sql, todo, function (error, results, fields) {
     if (error) {
       console.log(error)
       throw error
     }
     if (results[0].length == 0) {
-      console.log(todo.username + ' login error')
+      console.log(req.body.account + ' login error')
       return res.send({
         status: '0001',
         message: 'login error'
@@ -94,7 +94,7 @@ router.post('/login', function (req, res) {
     }, SECRET_KEY, {
       expiresIn: 60 * 60 * 1
     })
-    console.log(todo.username + ' login success')
+    console.log(req.body.account + ' login success')
     return res.send({
       status: '0000',
       claims: claims,
@@ -105,32 +105,32 @@ router.post('/login', function (req, res) {
 })
 
 router.post('/register', function (req, res) {
-  let todo = {
-    nickname: req.body.nickname,
-    username: req.body.username,
-    email: req.body.email,
-    password: req.body.password,
-    identity: req.body.identity
-  }
+  let todo = [
+    req.body.nickname,
+    req.body.account,
+    req.body.email,
+    req.body.password,
+    req.body.identity
+  ]
   // console.log(true)
-  let sql = `INSERT INTO memberdata (username,nickname,email, password,identityid) VALUES ('${todo.username}','${todo.nickName}','${todo.email}', '${todo.password}',${todo.identity})`
+  let sql = 'rsRegister'
   // console.log(req.body)
   console.log(sql)
-  req.query(sql, function (error, results, fields) {
+  req.query(sql, todo, function (error, results, fields) {
     if (error) {
       console.log(error)
       throw error
     }
     if (results.length == 0) {
-      console.log(todo.accousernameunt + ' register error')
+      console.log(req.body.account + ' register error')
       return res.send({
         status: '0001',
         message: 'register error'
       })
     }
-    console.log(todo.username + ' register success')
+    console.log(req.body.account + ' register success')
     let userinfo = {
-      username: req.body.username,
+      account: req.body.account,
       nickname: req.body.nickname,
       identity: req.body.identity_name === 2 ? ('paint') : (req.body.identity_name === 1 ? ('admin') : ('p'))
     }

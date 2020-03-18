@@ -14,14 +14,17 @@ router.get('/getAccountInfo', function (req, res, next) {
         message: 'Incorrect token'
       })
     }
-    let userInfo = decoded.userInfo
-    let sql = `rsGetAccount('${userInfo.username}')`
+    let todo = [decoded.userInfo.account]
+    let sql = `rsGetAccount`
     // console.log(sql)
     // req.connect()
-    req.query(sql, function (error, results, fields) {
+    req.query(sql, todo, function (error, results, fields) {
       if (error) {
         console.log(error)
-        throw error
+        return res.status(401).json({
+          status: '0005',
+          message: 'Incorrect token'
+        })
       }
       req.username = decoded.username;
       // console.log(results)
@@ -37,20 +40,20 @@ router.get('/getAccountInfo', function (req, res, next) {
 })
 
 router.post('/updateAccountInfo', function (req, res) {
-  console.log(req.body)
+  // console.log(req.body)
   let updateInfo = req.body.updateInfo
-  let sql = `UPDATE memberdata SET 
-  '${updateInfo.username}',
-  '${updateInfo.realname}' , 
-  '${updateInfo.nickname}' ,
-  '${updateInfo.icon}',
-  '${updateInfo.email}',
-  '${updateInfo.phone}',
-  '${updateInfo.birthday}',
-  '${updateInfo.address}'
-  `
-sql=`rsUpdateAccountInfo('${updateInfo.username}','${updateInfo.realname}','${updateInfo.nickname}','${updateInfo.icon}','${updateInfo.email}','${updateInfo.cellphone}','${updateInfo.birthday}','${updateInfo.address}')`
-  req.query(sql, function (error, results, fields) {
+
+  param = [updateInfo.username
+    , updateInfo.realname
+    , updateInfo.nickname
+    , updateInfo.icon
+    , updateInfo.email
+    , updateInfo.cellphone
+    , updateInfo.birthday
+    , updateInfo.address]
+
+  let sql = `rsUpdateAccountInfo`
+  req.query(sql, param, function (error, results, fields) {
     if (error) {
       console.log()
       throw error

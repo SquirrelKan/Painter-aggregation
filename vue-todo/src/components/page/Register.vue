@@ -40,9 +40,9 @@ export default {
   data() {
     let validatePass = (rule, value, callback) => {
       if (value === "") {
-        callback(new Error("请再次输入密码"));
+        callback(new Error("請再輸入"));
       } else if (value !== this.submitForm.password) {
-        callback(new Error("两次输入密码不一致!"));
+        callback(new Error("兩次輸入密碼不一致!"));
       } else {
         callback();
       }
@@ -59,24 +59,32 @@ export default {
       rules: {
         nickName: [
           { required: true, message: "請輸入暱稱", trigger: "blur" },
-          { min: 2, max: 6, message: "帳號在50個字以內", trigger: "blur" }
+          { min: 2, max: 6, message: "暱稱在6個字以內", trigger: "blur" }
         ],
         account: [
           { required: true, message: "請輸入帳號", trigger: "blur" },
           { min: 1, max: 50, message: "帳號在50個字以內", trigger: "blur" },
           { pattern: /^\S+$/, message: "不允許有空格", trigger: "blur" }
         ],
-        email: [{ required: true, message: "请输入email", trigger: "blur" }],
+        email: [{ required: true, message: "請輸入email", trigger: "blur" }],
         password: [
           {
             required: true,
-            message: "请输入长度为6-20位包含数字、字母的密码",
+            message: "請輸入密碼",
+            trigger: "blur"
+          },
+          {
+            pattern: /^(?=.*\d)(?=.*[a-zA-Z])(?=.*[\W_]).{6,20}$/,
+            message: "请输入长度为6-20位包含数字、字母、特殊字符的密码",
             trigger: "blur"
           }
-          // { pattern: /^(?=.*\d)(?=.*[a-zA-Z])(?=.*[\W_]).{6,20}$/, message: '请输入长度为6-20位包含数字、字母、特殊字符的密码', trigger: 'blur' }
         ],
         confirmpassword: [
-          // { required: true, message: '请输入长度为6-20位包含数字、字母的密码', trigger: 'blur' },
+          // {
+          //   required: true,
+          //   message: "請輸入確認密碼",
+          //   trigger: "blur"
+          // },
           { validator: validatePass, trigger: "change" }
         ]
       }

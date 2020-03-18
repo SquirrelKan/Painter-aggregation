@@ -25,7 +25,7 @@
               <el-col :span="2">
                 <span>類型:</span>
               </el-col>
-              <el-col :span="1" v-for="(item, index) in classDatas" :key="index">
+              <el-col :span="1" v-for="(item, index) in greneDatas" :key="index">
                 <span>{{ item.name }}</span>
               </el-col>
             </el-row>
@@ -135,37 +135,8 @@ export default {
   data() {
     return {
       filter_name: "",
-      paintInfos: [
-        {
-          id: "1",
-          nickname: "風滅",
-          icon: "https://s25.postimg.cc/98r2cyxdr/moe10.png",
-          rate: 3,
-          images: [
-            {
-              src:
-                "https://cw1.tw/CW/images/article/201608/article-57a06c0800d14.jpg"
-            },
-            {
-              src:
-                "https://imgs.gvm.com.tw/upload/gallery/20171128/41252_02.jpg"
-            }
-          ]
-        },
-        {
-          id: "2",
-          nickname: "奏夜",
-          icon: "https://s25.postimg.cc/qysqxzg3j/moe9.png",
-          rate: 5,
-          images: [
-            {
-              src:
-                "https://cw1.tw/CW/images/article/201608/article-57a06c0800d14.jpg"
-            }
-          ]
-        }
-      ],
-      classDatas: [{ name: "全部" }, { name: "排序" }],
+      paintInfos: [],
+      greneDatas: [{ name: "全部" }, { name: "排序" }],
       styleDatas: [
         { name: "日系", id: 1 },
         { name: "平涂", id: 2 },
@@ -186,6 +157,12 @@ export default {
     this.currentChangePage(this.paintInfos, this.currentPage);
   },
   methods: {
+    getGenre() {
+      let self = this;
+      self.$axios.get("/api/v1/common/getGenre", {}).then(function(response) {
+        self.greneDatas = response.data.data.greneData;
+      });
+    },
     getStyle() {
       let self = this;
       self.$axios.get("/api/v1/getStyle", {}).then(function(response) {
@@ -242,11 +219,12 @@ export default {
   created: function() {
     // let self = this
     // this.handleSizeChange()
+    this.getGenre();
     this.getStyle();
     this.getPaint();
     // console.log(self.paintInfos)
-    // console.log('test' + self.classDatas)
-    // console.log(self.classDatas)
+    // console.log('test' + self.greneDatas)
+    // console.log(self.greneDatas)
   }
 };
 </script>

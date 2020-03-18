@@ -79,5 +79,17 @@ export default {
       isLogin: false
     },
     component: () => import( /* webpackChunkName: "AccoutInfo" */ '@/components/page/AccoutInfo')
+  }, {
+    path: '/forgetPassword',
+    name: 'ForgetPassword',
+    meta: {
+      title: '忘記密碼',
+      isLogin: false
+    },
+    component: () => import( /* webpackChunkName: "ForgetPassword" */ '@/components/page/ForgetPassword')
+  }, {
+    path: '/404',
+    component: () => import(/* webpackChunkName: "404" */ '@/components/page/404.vue'),
+    meta: { title: '404' }
   }]
 }
