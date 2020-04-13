@@ -25,7 +25,7 @@
           <el-row>
             <el-col :span="11">
               <div class="grid-content bg-purple">
-                <el-input placeholder="50"></el-input>
+                <el-input v-model="price.lower_price" placeholder="50"></el-input>
               </div>
             </el-col>
             <el-col :span="2">
@@ -33,7 +33,7 @@
             </el-col>
             <el-col :span="11">
               <div class="grid-content bg-purple-light">
-                <el-input placeholder="不限"></el-input>
+                <el-input v-model="price.upper_price" placeholder="不限"></el-input>
               </div>
             </el-col>
           </el-row>
@@ -51,7 +51,7 @@
       </el-aside>
       <el-main>
         <el-row :gutter="20">
-          <el-col class="cardheight" :span="12" v-for="(item ,index) in projects" :key="index">
+          <el-col class="cardheight" :span="12" v-for="(item ,index) in projectsInfo" :key="index">
             <router-link :to="{name:'ProjectsInfo', params: { pid: item.projects_id}}">
               <el-card class="box-card">
                 <el-row>
@@ -62,7 +62,7 @@
                       <span>NTD/張</span>
                     </el-button>
                     <el-divider></el-divider>
-                    發布於{{ item.release_time }}
+                    <!-- 發布於{{ item.start_dt }} -->
                   </el-col>
                 </el-row>
                 <el-row>{{item.date}}</el-row>
@@ -75,7 +75,7 @@
                   <el-col :span="6">
                     截稿日期
                     <br />
-                    {{item.end_time}}
+                    {{item.end_dt}}
                   </el-col>
                   <el-col :span="6">
                     風格要求
@@ -88,9 +88,10 @@
                   </el-col>
                 </el-row>
                 <el-row>
+                  <el-divider></el-divider>
                   <el-col>
                     詳細摘要
-                    <span style="font-size: 12px;">{{item.summary}}</span>
+                    <span style="font-size: 12px; color:rgb(74, 10, 10);">{{item.summary}}</span>
                   </el-col>
                 </el-row>
               </el-card>
@@ -120,53 +121,29 @@ export default {
       pageSize: 5,
       tempList: [],
       list: [],
+      price: { lower_price: "", upper_price: "" },
       checkList: ["选中且禁用", "商業企劃"],
       datavalue: 0,
       projects: [
-        // {
-        //   value: "選項1",
-        //   label: "發布時間"
-        // },
-        // {
-        //   value: "選項2",
-        //   label: "稿酬預算"
-        // },
-        // {
-        //   value: "選項3",
-        //   label: "雇主信譽"
-        // },
-        // {
-        //   value: "選項4",
-        //   label: "應徵人數"
-        // }
+        {
+          value: "選項1",
+          label: "發布時間"
+        },
+        {
+          value: "選項2",
+          label: "稿酬預算"
+        },
+        {
+          value: "選項3",
+          label: "雇主信譽"
+        },
+        {
+          value: "選項4",
+          label: "應徵人數"
+        }
       ],
       value: "",
-      projectsInfo: [
-        // {
-        // pid: 1,
-        //   name: "風滅",
-        //   date: "2019-09-02",
-        //   use: "其他·插图"
-        // },
-        // {
-        //   pid: 2,
-        //   name: "風滅",
-        //   date: "2019-09-02",
-        //   use: "其他·插图"
-        // },
-        // {
-        //   pid: 3,
-        //   name: "風滅",
-        //   date: "2019-09-02",
-        //   use: "其他·插图"
-        // },
-        // {
-        //   pid: 4,
-        //   name: "風滅",
-        //   date: "2019-09-02",
-        //   use: "其他·插图"
-        // }
-      ]
+      projectsInfo: []
     };
   },
   methods: {
@@ -176,8 +153,8 @@ export default {
         .get("/api/v1/project/getProjects", {})
         .then(function(response) {
           //console.log('getProjects test')
-          self.projects = response.data.data.projects;
-          //       console.log(response.data.data)
+          self.projectsInfo = response.data.data.projects;
+          console.log(response.data.data);
           //console.log(self.projects)
           self.tempList = [];
           // for (var i = 0; i < self.pageSize; i++) {
@@ -196,7 +173,7 @@ export default {
     handleCurrentChange: function(currentPage) {
       // 页码切换
       this.currentPage = currentPage;
-      this.currentChangePage(this.projects, currentPage);
+      this.currentChangePage(this.projectsInfo, currentPage);
     },
     // 分页方法（重点）
     currentChangePage(list, currentPage) {
