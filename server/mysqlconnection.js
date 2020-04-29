@@ -18,8 +18,9 @@ var query = function (spName, options, callback) {
         pool.getConnection(function (err, conn) {
             if (err) {
                 // throw err
+                callback(err, null, null)
             } else {
-                conn.query(spQuery,spName, function (err, results, fields) {
+                conn.query(spQuery, spName, function (err, results, fields) {
                     // callback
                     callback(err, results, fields)
                 })
@@ -31,6 +32,7 @@ var query = function (spName, options, callback) {
             // console.log(sql, param)
             if (err) {
                 // throw err
+                callback(err, null, null)
             } else {
                 conn.query(spQuery, [spName, options], function (err, results, fields) {
                     // callback

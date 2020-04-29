@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.17, for Win64 (x86_64)
 --
--- Host: localhost    Database: painteraggregation
+-- Host: localhost    Database: paintercol
 -- ------------------------------------------------------
 -- Server version	8.0.17
 
@@ -32,9 +32,8 @@ CREATE TABLE `artwork` (
   `start_dt` datetime NOT NULL,
   `end_dt` datetime NOT NULL,
   `artwork_file_path` varchar(45) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `zartwork` timestamp NOT NULL,
+  `zartwork` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `z_last_editor_id` int(11) NOT NULL,
-  `artworkcol` varchar(45) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`id`,`style_id`,`genre_id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
@@ -117,7 +116,7 @@ DROP TABLE IF EXISTS `genre`;
 CREATE TABLE `genre` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(45) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `zgenre` timestamp NOT NULL,
+  `zgenre` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
@@ -143,7 +142,7 @@ DROP TABLE IF EXISTS `identity`;
 CREATE TABLE `identity` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(30) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `zidentity` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `zidentity` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='身分主檔';
@@ -173,17 +172,18 @@ CREATE TABLE `member` (
   `password` varchar(45) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `username` varchar(45) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `nickname` varchar(45) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `birthday` date NOT NULL,
+  `birthday` date NOT NULL DEFAULT '1990-12-31',
   `email` varchar(45) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `cellphone` varchar(45) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `homephone` varchar(45) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `address` varchar(45) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `register_dt` timestamp(6) NOT NULL,
-  `zmember` timestamp(6) NOT NULL,
+  `register_dt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP();',
+  `zmember` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `icon` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `realname` varchar(45) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `id_UNIQUE` (`id`),
-  UNIQUE KEY `identity_id_UNIQUE` (`identity_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+  UNIQUE KEY `id_UNIQUE` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -192,7 +192,7 @@ CREATE TABLE `member` (
 
 LOCK TABLES `member` WRITE;
 /*!40000 ALTER TABLE `member` DISABLE KEYS */;
-INSERT INTO `member` VALUES (1,'gccbb02498',0,'aicdfida','gccbb02498','maple','0000-00-00','','','','','0000-00-00 00:00:00.000000','0000-00-00 00:00:00.000000');
+INSERT INTO `member` VALUES (1,'gccbb02498',1,'10d37f81a5613f9d2a33d50b105c8d8a','gccbb02498','maple','1994-09-02','fdes40701','0978925012','034819484',' ','1990-12-30 16:00:00','2020-02-21 16:40:02','','祁恩'),(2,'w93303920000',1,'1234','w93303920000 ','','0000-00-00','','','','','1990-12-30 16:00:00','1990-12-30 16:00:00','',''),(3,'natsu_ft',2,'1234','natsu_ft','愚蠢作嫁','0000-00-00','','','','','1990-12-30 16:00:00','2020-04-13 06:07:35','',''),(4,'lucy_ft',3,'1234','lucy_ft','12312412','0000-00-00','','','','','1990-12-30 16:00:00','2020-02-17 06:07:30','https://s25.postimg.cc/98r2cyxdr/moe10.png',''),(5,'erza_ft',4,'1234','erza_ft','','0000-00-00','','','','','1990-12-30 16:00:00','1990-12-30 16:00:00','','');
 /*!40000 ALTER TABLE `member` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -208,7 +208,7 @@ CREATE TABLE `painter` (
   `account` varchar(45) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `identity_id` int(10) unsigned NOT NULL,
   `painter_avatar` varchar(45) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `zmember_painter` timestamp NOT NULL,
+  `zmember_painter` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`,`account`,`identity_id`),
   UNIQUE KEY `account_UNIQUE` (`account`),
   UNIQUE KEY `id_UNIQUE` (`id`)
@@ -240,7 +240,10 @@ CREATE TABLE `proposal` (
   `start_dt` datetime DEFAULT NULL,
   `end_dt` datetime DEFAULT NULL,
   `applicant_count` int(11) DEFAULT NULL,
-  `zproposal` timestamp NULL DEFAULT NULL,
+  `zproposal` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `lower_price` int(11) NOT NULL,
+  `upper_price` int(11) NOT NULL,
+  `summary` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -251,7 +254,7 @@ CREATE TABLE `proposal` (
 
 LOCK TABLES `proposal` WRITE;
 /*!40000 ALTER TABLE `proposal` DISABLE KEYS */;
-INSERT INTO `proposal` VALUES (1,3,2,5,'妖精的尾巴_100年公會任務',NULL,NULL,NULL,NULL),(2,3,2,7,'高階機械式鍵盤展',NULL,NULL,NULL,NULL),(3,3,1,9,'拉赫曼尼諾夫鋼琴協奏曲見面會',NULL,NULL,NULL,NULL),(4,3,4,1,'館長好強壯健健美',NULL,NULL,NULL,NULL);
+INSERT INTO `proposal` VALUES (1,3,2,5,'妖精的尾巴_100年公會任務','2020-01-31 00:00:00','2020-02-28 00:00:00',NULL,'2020-04-13 03:07:55',10,20,'安安'),(2,3,2,7,'高階機械式鍵盤展',NULL,NULL,NULL,'2020-04-13 03:07:55',0,0,'汪汪'),(3,3,1,9,'拉赫曼尼諾夫鋼琴協奏曲見面會',NULL,NULL,NULL,'2020-04-13 03:07:55',0,0,'CC'),(4,3,4,1,'館長好強壯健健美',NULL,NULL,NULL,'2020-04-13 03:07:55',0,0,'AA');
 /*!40000 ALTER TABLE `proposal` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -265,10 +268,10 @@ DROP TABLE IF EXISTS `proposal_type`;
 CREATE TABLE `proposal_type` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(45) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `zproposal_type` timestamp NOT NULL,
+  `zproposal_type` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -277,6 +280,7 @@ CREATE TABLE `proposal_type` (
 
 LOCK TABLES `proposal_type` WRITE;
 /*!40000 ALTER TABLE `proposal_type` DISABLE KEYS */;
+INSERT INTO `proposal_type` VALUES (1,'商業企劃','1990-12-30 16:00:00'),(2,'個人企劃','1990-12-30 16:00:00');
 /*!40000 ALTER TABLE `proposal_type` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -291,7 +295,7 @@ CREATE TABLE `proposer` (
   `id` int(10) unsigned NOT NULL,
   `account` varchar(45) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `identity_id` int(11) NOT NULL,
-  `zmember_proposer` timestamp NOT NULL,
+  `zmember_proposer` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`,`account`,`identity_id`),
   UNIQUE KEY `account_UNIQUE` (`account`),
   UNIQUE KEY `id_UNIQUE` (`id`)
@@ -320,7 +324,7 @@ CREATE TABLE `series_relation` (
   `artwork_id` int(10) unsigned NOT NULL,
   `start_dt` datetime NOT NULL,
   `end_dt` datetime NOT NULL,
-  `zcollaborate_relation` timestamp NOT NULL,
+  `zcollaborate_relation` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `z_painter_id` int(11) NOT NULL,
   PRIMARY KEY (`id`,`collection_id`,`artwork_id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
@@ -346,7 +350,7 @@ DROP TABLE IF EXISTS `style`;
 CREATE TABLE `style` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `zstyle` timestamp NOT NULL,
+  `zstyle` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -362,21 +366,23 @@ INSERT INTO `style` VALUES (0,'全部','0000-00-00 00:00:00'),(1,'日系','0000-
 UNLOCK TABLES;
 
 --
--- Dumping routines for database 'painteraggregation'
+-- Dumping routines for database 'paintercol'
 --
 /*!50003 DROP PROCEDURE IF EXISTS `rsCreateGenre` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `rsCreateGenre`(name nvarchar(20))
 BEGIN
-	INSERT INTO `painteraggregation`.`genre` (`name`) VALUES (name); 
+    IF name<>'' THEN
+	    INSERT INTO `paintercol`.`genre` (`name`) VALUES (name); 
+    END IF;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -387,15 +393,110 @@ DELIMITER ;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `rsCreateStyle`(name nvarchar(20))
 BEGIN
-	INSERT INTO `painteraggregation`.`style` (`name`) VALUES (name); 
+	INSERT INTO `paintercol`.`style` (`name`) VALUES (name); 
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `rsCreateUserInfo` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `rsCreateUserInfo`(
+	  account nvarchar(20)
+	, identity_id int
+	, password nvarchar(20)
+	, username nvarchar(20))
+BEGIN
+	INSERT INTO `paintercol`.`member` (
+    `account`
+    , `identity_id`
+    , `password`
+    , `username`
+    , `nickname`
+    , `birthday`
+    , `email`
+    , `cellphone`
+    , `homephone`
+    , `address`) VALUES (
+	  account
+    , identity_id
+    , password
+    , username
+    , ''
+    , '0000-00-00'
+    , ''
+    , ''
+    , ''
+    , '');
+
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `rsGenreSave` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `rsGenreSave`(Genre varchar(20))
+BEGIN
+    SET @Genre =Genre;
+    set @count =(select name from genre where name=@Genre);
+   
+    
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `rsGetAccount` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `rsGetAccount`(account nvarchar(20))
+BEGIN
+SELECT 
+   paintercol.member.account
+  ,nickname
+  ,realname
+  ,icon
+  ,birthday
+  ,email
+  ,cellphone
+  ,address 
+FROM paintercol.member 
+WHERE paintercol.member.account = account;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -450,19 +551,108 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `rsGetGenreList` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `rsGetGenreList`()
+BEGIN
+    Select * from paintercol.genre;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `rsGetLoginData` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `rsGetLoginData`(account nvarchar(20),password nvarchar(45))
+BEGIN
+SELECT 
+      paintercol.member.account
+    , nickname
+    , identity.name
+FROM paintercol.member JOIN identity ON 
+  paintercol.member.identity_id = identity.id 
+WHERE paintercol.member.account=account 
+  AND paintercol.member.password=password;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `rsGetPaint` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `rsGetPaint`()
 BEGIN
-	select * from painter;
+	select * from paintercol.member
+    where identity_id=3;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `rsGetProposalList` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `rsGetProposalList`(pid int)
+BEGIN
+	Set @pid =pid;
+SELECT 
+    proposal.id projects_id,
+    proposal.name projects_name,
+    nickname,
+    style.name style_name,
+    lower_price,
+    upper_price,
+    summary,
+    start_dt,
+    end_dt
+FROM
+    paintercol.proposal
+        JOIN
+    paintercol.member ON paintercol.member.id = proposal.proposer_id
+        JOIN
+    proposal_type ON proposal_type.id = proposal.proposal_type
+        JOIN
+    style ON style.id = proposal.demanded_style
+WHERE
+    1 = (CASE
+        WHEN @pid = 0 THEN 1
+        WHEN proposal.id = @pid THEN 1
+        ELSE 0
+    END);
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -519,6 +709,81 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `rsRegister` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `rsRegister`(
+	  username	 nvarchar(20)
+    , nickName   nvarchar(20)
+    , email      nvarchar(20)
+    , password   nvarchar(20)
+    , identity   nvarchar(20)
+)
+BEGIN
+INSERT INTO memberdata(
+	  `username`
+	, `nickname`
+	, `email`
+	, `password`
+	, `identityid`) 
+VALUES (
+	  username
+    , nickName 
+    , email 
+    , password
+    , identity);
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `rsUpdateAccountInfo` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `rsUpdateAccountInfo`(
+   account 	 nvarchar(20)
+  ,realname	 nvarchar(20)
+  ,nickname  nvarchar(20)
+  ,icon		 nvarchar(45)
+  ,email 	 nvarchar(20)
+  ,cellphone nvarchar(20)
+  ,birthday  nvarchar(20)
+  ,address 	 nvarchar(45)
+
+)
+BEGIN
+SET SQL_SAFE_UPDATES=0;
+UPDATE paintercol.member SET
+    paintercol.member.realname		=realname	
+   ,paintercol.member.nickname 		=nickname  
+   ,paintercol.member.icon		 	=icon		 
+   ,paintercol.member.email 		=email 	 
+   ,paintercol.member.cellphone 	=cellphone
+   ,paintercol.member.birthday 		=birthday
+   ,paintercol.member.address 		=address 		 
+where paintercol.member.account =account ;
+SET SQL_SAFE_UPDATES=1;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -529,4 +794,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-01-08 14:30:26
+-- Dump completed on 2020-04-28 20:53:33

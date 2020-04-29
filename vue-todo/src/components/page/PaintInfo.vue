@@ -59,7 +59,7 @@
             <el-row>
               <el-col :span="2">
                 <div class="grid-content bg-purple">
-                  <router-link :to="{name:'User', params: { id: paintInfo.id}}">
+                  <router-link :to="{name:'User', params: { id: paintInfo.id,nickname:paintInfo.nickname}}">
                     <el-image
                       style="width: 60px; height: 60px"
                       :src="paintInfo.icon"

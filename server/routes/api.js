@@ -68,6 +68,33 @@ router.post('/getUserInfo', function (req, res) {
   })
 })
 
+router.post('/gettest', function (req, res) {
+  // console.log(req.body)
+  let userData = {
+    nickname: req.body.nickname
+  }
+  let sql = `rsGettest`
+  console.log(userData.nickname)
+  req.query(sql, userData.nickname, function (error, results, fields) {
+    if (error) {
+      console.log(error)
+    }
+    if (results[0].length === 0) {
+      return res.send({
+        status: '0001',
+        message: 'get error',
+      })
+    }
+    return res.send({
+      status: '0000',
+      message: 'get list',
+      data: {
+        user: results[0]
+      }
+    })
+
+  })
+})
 
 router.get('/api/user', function (req, res) {
   req.session.user = null

@@ -64,7 +64,7 @@ export default {
     },
     component: () => import( /* webpackChunkName: "Register" */ '@/components/page/Register')
   }, {
-    path: '/user/:id',
+    path: '/user/:nickname',
     name: 'User',
     meta: {
       title: '個人主頁',
@@ -89,7 +89,9 @@ export default {
     component: () => import( /* webpackChunkName: "ForgetPassword" */ '@/components/page/ForgetPassword')
   }, {
     path: '/404',
-    component: () => import(/* webpackChunkName: "404" */ '@/components/page/404.vue'),
-    meta: { title: '404' }
+    component: () => import( /* webpackChunkName: "404" */ '@/components/page/404.vue'),
+    meta: {
+      title: '404'
+    }
   }]
 }
