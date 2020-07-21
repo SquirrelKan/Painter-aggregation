@@ -102,8 +102,18 @@ export default {
               // this.reload()
               // this.getuserinfo()
               // this.$store.commit('login')
+              console.log(data)
+              var pag='Main'
+              switch (data.data.name){
+                case '系統管理員':
+                  pag="Main"
+                  break
+                case '繪師':
+                  pag="PaintIndex"
+                  break
+              }
               self.$router.push({
-                name: "Main"
+                name: pag
               });
             } else {
               self.$message({

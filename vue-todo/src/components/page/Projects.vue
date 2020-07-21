@@ -18,8 +18,14 @@
           </el-checkbox-group>
           <el-divider></el-divider>企劃類型
           <el-divider></el-divider>截稿日期
-          <span class="demonstration">默认</span>
-          <el-slider v-model="datavalue"></el-slider>
+          <span class="demonstration" style="float:right;">{{ deadline }}</span>
+          <el-slider
+            v-model="datavalue"
+            @input="currentChangeSilder"
+            :show-tooltip="false"
+            :max="3"
+            :marks="marks"
+          ></el-slider>
           <el-divider></el-divider>
           <el-row>稿酬區間</el-row>
           <el-row>
@@ -143,6 +149,13 @@ export default {
         }
       ],
       value: "",
+      marks: {
+        0: "",
+        1: "",
+        2: "",
+        3: ""
+      },
+      deadline: "一個月內",
       projectsInfo: []
     };
   },
@@ -154,7 +167,7 @@ export default {
         .then(function(response) {
           //console.log('getProjects test')
           self.projectsInfo = response.data.data.projects;
-          console.log(response.data.data);
+          // console.log(response.data.data);
           //console.log(self.projects)
           self.tempList = [];
           // for (var i = 0; i < self.pageSize; i++) {
@@ -185,6 +198,25 @@ export default {
           this.tempList.push(list[from]);
         }
       }
+    },
+    currentChangeSilder() {
+      console.log("aa");
+      var s = "一個月內";
+      switch (this.datavalue) {
+        case 0:
+          s = "一個月內";
+          break;
+        case 1:
+          s = "三個月內";
+          break;
+        case 2:
+          s = "六個月內";
+          break;
+        case 3:
+          s = "全部";
+          break;
+      }
+      this.deadline = s;
     }
   },
   created: function() {
