@@ -1,4 +1,4 @@
-// index.js
+// index.js 廢棄
 var express = require('express');
 var bodyParser = require('body-parser')
 var mysql = require("mysql")

@@ -1,17 +1,21 @@
 // common.js
+'use strict';
+
+var moment = require('moment')
+var debug = require("debug")(`[${moment().format('YYYY-MM-DD HH:mm:ss')}]debug:common`);
 var express = require('express')
 var router = express.Router()
 
 router.get('/getGenre', function (req, res) {
-    id = req.body.id === undefined || req.body.id === '' ? 0 : req.body.id;
+    let id = !req.body.id || req.body.id === '' ? 0 : req.body.id;
     let sql = "rsGetGenre"
-    // console.log(sql);
+    debug(sql);
     req.query(sql, id, function (error, results, fields) {
         if (error) {
-            console.log(error)
+            debug(error)
             return res.status(400).send()
         }
-        // console.log(results)
+        // debug(results)
         return res.send({
             status: '0000',
             message: 'get paintdata',
@@ -23,12 +27,12 @@ router.get('/getGenre', function (req, res) {
 })
 
 router.get('/getStyle', function (req, res) {
-    id = req.body.id === undefined || req.body.id === '' ? 0 : req.body.id;
+    id = !req.body.id || req.body.id === '' ? 0 : req.body.id;
     let sql = 'rsGetStyle'
-    //console.log(sql);
+    debug(sql);
     req.query(sql, id, function (error, results, fields) {
         if (error) {
-            console.log(error)
+            debug(error)
             return res.status(400).send()
         }
         return res.send({
@@ -41,6 +45,6 @@ router.get('/getStyle', function (req, res) {
     })
 })
 
-console.log('common load end')
+debug('common load end')
 
 module.exports = router

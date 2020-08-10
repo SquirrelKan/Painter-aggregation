@@ -91,9 +91,16 @@ export default {
       path: '/paintindex',
       name: 'PaintIndex',
       meta: {
-        title: '首頁 - 繪師集'
+        title: '繪師集主頁 - 繪師集'
       },
       component: () => import( /* webpackChunkName: "Main" */ '@/components/page/PaintIndex')
+    }, {
+      path: '/projectindex',
+      name: 'ProjectIndex',
+      meta: {
+        title: '業主主頁 - 繪師集'
+      },
+      component: () => import( /* webpackChunkName: "Main" */ '@/components/page/ProjectIndex')
     }, {
       path: '/invite',
       name: 'Invite',

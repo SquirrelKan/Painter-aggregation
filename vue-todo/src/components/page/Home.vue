@@ -39,6 +39,14 @@
                 <el-dropdown-item>
                   <router-link to="/ForgetPassword">忘記密碼</router-link>
                 </el-dropdown-item>
+                <template v-if="userInfo.name=='系統管理員'">
+                  <el-dropdown-item>
+                    <router-link to="/paintindex">繪師主頁</router-link>
+                  </el-dropdown-item>
+                  <el-dropdown-item>
+                    <router-link to="/projectindex">業主主頁</router-link>
+                  </el-dropdown-item>
+                </template>
                 <el-dropdown-item>Action 3</el-dropdown-item>
                 <el-dropdown-item>Action 4</el-dropdown-item>
                 <el-dropdown-item>Action 5</el-dropdown-item>
@@ -113,7 +121,8 @@ export default {
           });
       }
     },
-    handleSelect(key, keyPath) {// eslint-disable-line no-unused-vars
+    handleSelect(key, keyPath) {
+      // eslint-disable-line no-unused-vars
       if (key !== null) {
         this.$router.push(key);
       }

@@ -1,4 +1,7 @@
 // auth.js
+'use strict';
+
+var debug = require("debug")("debug:auth");
 var express = require('express')
 var router = express.Router()
 const jwt = require('jsonwebtoken')
@@ -28,7 +31,7 @@ router.get('/getUserInfo', function (req, res, next) {
     }
     // req.username = decoded.username;
     req.username = decoded.username;
-    // console.log(decoded.userInfo)
+    // debug(decoded.userInfo)
     return res.send({
       status: '0000',
       message: 'getuserinfo token',
@@ -43,7 +46,7 @@ router.post('/getUserInfo', function (req, res) {
   let sql = 'rsGetUserInfo'
   req.query(sql, todo, function (error, results, fields) {
     if (error) {
-      console.log(error)
+      debug(error)
       throw error
     }
     if (results.length !== 0) {
@@ -57,8 +60,8 @@ router.post('/getUserInfo', function (req, res) {
       message: 'getUserinfo 不存在'
     })
   })
-  // console.log(sql)
-  // console.log(decoded.userInfo)
+  // debug(sql)
+  // debug(decoded.userInfo)
 
   // next();
   // })
@@ -69,32 +72,32 @@ router.post('/login', function (req, res) {
     req.body.account,
     req.body.password
   ]
-  console.log(req.body)
+  debug(req.body)
   let sql = 'rsGetLoginData'
-  // console.log(sql)
+  // debug(sql)
   req.query(sql, todo, function (error, results, fields) {
     if (error) {
-      console.log(error)
+      debug(error)
       throw error
     }
     if (results[0].length == 0) {
-      console.log(req.body.account + ' login error')
+      debug(req.body.account + ' login error')
       return res.send({
         status: '0001',
         message: 'login error'
       })
     }
     // data= {data}
-    // console.log(results[0])
+    // debug(results[0])
     let userinfo = JSON.parse(JSON.stringify(results[0][0]))
 
-    // console.log(userinfo)
+    // debug(userinfo)
     const claims = jwt.sign({
       userInfo: userinfo
     }, SECRET_KEY, {
       expiresIn: 60 * 60 * 1
     })
-    console.log(req.body.account + ' login success')
+    debug(req.body.account + ' login success')
     return res.send({
       status: '0000',
       claims: claims,
@@ -112,23 +115,23 @@ router.post('/register', function (req, res) {
     req.body.password,
     req.body.identity
   ]
-  // console.log(true)
+  // debug(true)
   let sql = 'rsRegister'
-  // console.log(req.body)
-  console.log(sql)
+  // debug(req.body)
+  debug(sql)
   req.query(sql, todo, function (error, results, fields) {
     if (error) {
-      console.log(error)
+      debug(error)
       throw error
     }
     if (results.length == 0) {
-      console.log(req.body.account + ' register error')
+      debug(req.body.account + ' register error')
       return res.send({
         status: '0001',
         message: 'register error'
       })
     }
-    console.log(req.body.account + ' register success')
+    debug(req.body.account + ' register success')
     let userinfo = {
       account: req.body.account,
       nickname: req.body.nickname,
@@ -151,6 +154,6 @@ router.post('/register', function (req, res) {
 })
 
 
-console.log('auth驗證載入完成')
+debug('auth驗證載入完成')
 //---
 module.exports = router

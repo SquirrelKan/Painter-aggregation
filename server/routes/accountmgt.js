@@ -1,4 +1,7 @@
 // accountmgt.js
+'use strict';
+
+var debug = require("debug")("debug:accountmgt");
 var express = require('express')
 var router = express.Router()
 const jwt = require('jsonwebtoken')
@@ -16,18 +19,18 @@ router.get('/getAccountInfo', function (req, res, next) {
     }
     let todo = [decoded.userInfo.account]
     let sql = `rsGetAccount`
-    // console.log(sql)
+    // debug(sql)
     // req.connect()
     req.query(sql, todo, function (error, results, fields) {
       if (error) {
-        console.log(error)
+        debug(error)
         return res.status(401).json({
           status: '0005',
           message: 'Incorrect token'
         })
       }
       req.username = decoded.username;
-      // console.log(results)
+      // debug(results)
       return res.send({
         status: '0000',
         message: 'getaccountinfo token',
@@ -35,27 +38,22 @@ router.get('/getAccountInfo', function (req, res, next) {
       })
     })
     // req.end()
-    // console.log('可以關閉')
+    // debug('可以關閉')
   })
 })
 
 router.post('/updateAccountInfo', function (req, res) {
-  // console.log(req.body)
+  // debug(req.body)
   let updateInfo = req.body.updateInfo
 
-  param = [updateInfo.username
-    , updateInfo.realname
-    , updateInfo.nickname
-    , updateInfo.icon
-    , updateInfo.email
-    , updateInfo.cellphone
-    , updateInfo.birthday
-    , updateInfo.address]
+  param = [
+    updateInfo.username, updateInfo.realname, updateInfo.nickname, updateInfo.icon, updateInfo.email, updateInfo.cellphone, updateInfo.birthday, updateInfo.address
+  ]
 
   let sql = `rsUpdateAccountInfo`
   req.query(sql, param, function (error, results, fields) {
     if (error) {
-      console.log()
+      debug()
       throw error
     }
     return res.send({
@@ -66,7 +64,7 @@ router.post('/updateAccountInfo', function (req, res) {
       // }
     })
   })
-  console.log(sql)
+  debug(sql)
 })
 
 module.exports = router
