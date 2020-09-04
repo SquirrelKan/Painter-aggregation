@@ -2,7 +2,7 @@
 var debug = require("debug")("debug:mysqlconnection");
 var mysql = require("mysql")
 var pool = mysql.createPool({
-    host: '10.0.4.52',
+    host: '34.80.160.131',
     user: 'maple',
     password: 'aicdfida',
     database: 'paintercol',

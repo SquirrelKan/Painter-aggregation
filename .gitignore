@@ -20,3 +20,5 @@ yarn-error.log*
 *.sln
 *.sw?
 vue-todo/dist/
+webapicore/bin/*
+webapicore/obj/*

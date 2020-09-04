@@ -6,8 +6,9 @@ import Admin from './admin'
 Vue.use(Router)
 
 export default new Router({
-  routes: [Main, Admin, {
-    path: '*',
-    redirect: '/404'
-  }]
+  routes: [
+    Main, Admin, {
+      path: '*',
+      redirect: '/404'
+    }]
 })
