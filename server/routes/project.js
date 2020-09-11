@@ -4,41 +4,39 @@
 var debug = require("debug")("debug:project");
 var express = require('express')
 var router = express.Router()
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
+const message = require("../message");
+const requestStatusCodes = require("../requestStatusCodes");
 const SECRET_KEY = require('../config/config').SECRET_KEY
 
-router.get('/getProjects', function (req, res) {
+router.get('/projects', function (req, res) {
   let sql = `rsGetProposalList`
   req.query(sql, 0, function (error, results, fields) {
     if (error) {
       debug(error)
       return res.status(400).send();
     }
-    return res.send({
-      status: '0000',
-      message: 'get paintdata',
-      data: {
-        projects: results[0]
-      }
-    })
+    return res.send(
+      message(requestStatusCodes.success, { projects: results[0] })
+    )
   })
 })
 
-router.post('/getProject', function (req, res) {
+router.post('/project', function (req, res) {
   let pid = req.body.pid;
   let sql = `rsGetProposalList`
   req.query(sql, pid, function (error, results, fields) {
     if (error) {
       debug(error)
-      return res.status(400).send();
+      return res.status(400).send(
+        message(requestStatusCodes.error, null)
+      );
     }
-    return res.send({
-      status: '0000',
-      message: 'get paintdata',
-      data: {
-        project: results[0][0]
-      }
-    })
+    if (results) {
+      return res.send(
+        message(requestStatusCodes.success, { project: results[0][0] })
+      )
+    }
   })
 })
 
@@ -48,15 +46,13 @@ router.get('/:pid', function (req, res) {
   req.query(sql, pid, function (error, results, fields) {
     if (error) {
       debug(error)
-      return res.status(400).send();
+      return res.status(400).send(
+        message(requestStatusCodes.error, null)
+      );
     }
-    return res.send({
-      status: '0000',
-      message: 'get paintdata',
-      data: {
-        project: results[0][0]
-      }
-    })
+    return res.send(
+      message(requestStatusCodes.success, { project: results[0][0] })
+    )
   })
 })
 

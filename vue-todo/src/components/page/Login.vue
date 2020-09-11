@@ -45,41 +45,41 @@ export default {
       isLogin: false,
       submitForm: {
         account: "",
-        password: ""
+        password: "",
       },
       rules: {
         account: [
           {
             required: true,
             message: "請輸入帳號",
-            trigger: "blur"
+            trigger: "blur",
           },
           {
             min: 1,
             max: 50,
             message: "帳號在50個字以內",
-            trigger: "blur"
+            trigger: "blur",
           },
           {
             pattern: /^\S+$/,
             message: "不允許有空格",
-            trigger: "blur"
-          }
+            trigger: "blur",
+          },
         ],
         password: [
           {
             required: true,
             message: "请输入长度为6-20位包含数字、字母的密码",
-            trigger: "blur"
-          }
+            trigger: "blur",
+          },
           // { pattern: /^(?=.*\d)(?=.*[a-zA-Z])(?=.*[\W_]).{6,20}$/, message: '请输入长度为6-20位包含数字、字母、特殊字符的密码', trigger: 'blur' }
-        ]
-      }
+        ],
+      },
     };
   },
   methods: {
     onSubmitClick(formName) {
-      this.$refs[formName].validate(vaild => {
+      this.$refs[formName].validate((vaild) => {
         console.log(vaild);
       });
       let self = this;
@@ -87,39 +87,36 @@ export default {
         self.$axios
           .post("/api/v1/auth/login", {
             account: self.submitForm.account,
-            password: md5(self.submitForm.password)
+            password: md5(self.submitForm.password),
           })
-          .then(function(response) {
-            let data = response.data;
+          .then(function (response) {
+            let result = response.data;
             // console.log(data)
-            if (data.status === "0000") {
-              localStorage.setItem("claims", response.data.claims);
+            if (result.status === 200) {
+              localStorage.setItem("claims", result.data.claims);
               self.$message({
                 showClose: true,
                 message: "恭喜妳，已成功登陸",
-                type: "success"
+                type: "success",
               });
-              // this.reload()
-              // this.getuserinfo()
-              // this.$store.commit('login')
-              console.log(data)
-              var pag='Main'
-              switch (data.data.name){
-                case '系統管理員':
-                  pag="Main"
-                  break
-                case '繪師':
-                  pag="PaintIndex"
-                  break
+
+              var pag = "Main";
+              switch (result.data.userinfo.name) {
+                case "系統管理員":
+                  pag = "Main";
+                  break;
+                case "繪師":
+                  pag = "PaintIndex";
+                  break;
               }
               self.$router.push({
-                name: pag
+                name: pag,
               });
             } else {
               self.$message({
                 showClose: true,
                 message: "登入失敗",
-                type: "error"
+                type: "error",
               });
             }
           });
@@ -130,21 +127,21 @@ export default {
     },
     toRegister() {
       this.$router.push("/register");
-    }
+    },
   },
   // computed: {
   //   ...mapState({
   //     isLogin: state => state.isLogin
   //   })
   // },
-  created: function() {
+  created: function () {
     let claims = localStorage.getItem("claims");
     if (claims) {
       this.$router.push({
-        name: "Main"
+        name: "Main",
       });
     }
-  }
+  },
 };
 </script>
 

@@ -59,7 +59,9 @@
             <el-row>
               <el-col :span="2">
                 <div class="grid-content bg-purple">
-                  <router-link :to="{name:'User', params: { id: paintInfo.id,nickname:paintInfo.nickname}}">
+                  <router-link
+                    :to="{name:'User', params: { id: paintInfo.id,nickname:paintInfo.nickname}}"
+                  >
                     <el-image
                       style="width: 60px; height: 60px"
                       :src="paintInfo.icon"
@@ -144,12 +146,12 @@ export default {
         { name: "厚涂", id: 4 },
         { name: "赛璐璐", id: 5 },
         { name: "日系", id: 6 },
-        { name: "日系", id: 7 }
+        { name: "日系", id: 7 },
       ],
       total: 0,
       currentPage: 1,
       pageSize: 5,
-      tempList: []
+      tempList: [],
     };
   },
   mounted() {
@@ -159,21 +161,21 @@ export default {
   methods: {
     getGenre() {
       let self = this;
-      self.$axios.get("/api/v1/common/getGenre", {}).then(function(response) {
-        self.greneDatas = response.data.data.greneData;
+      self.$axios.get("/api/v1/common/genre", {}).then(function (response) {
+        self.greneDatas = response.data.data;
       });
     },
     getStyle() {
       let self = this;
-      self.$axios.get("/api/v1/getStyle", {}).then(function(response) {
-        self.styleDatas = response.data.data.StyleDate;
+      self.$axios.get("/api/v1/common/style", {}).then(function (response) {
+        self.styleDatas = response.data.data;
       });
     },
     getPaint() {
       let self = this;
       self.$axios
-        .get("/api/v1/getPaint", {})
-        .then(function(response) {
+        .get("/api/v1/paint", {})
+        .then(function (response) {
           // console.log(response.data)
           self.paintInfos = response.data.data.paints;
           self.tempList = [];
@@ -182,16 +184,16 @@ export default {
               self.tempList.push(self.paintInfos[i]);
           }
         })
-        .catch(function(_error) {
+        .catch(function (_error) {
           console.log(_error);
         });
     },
-    handleSizeChange: function(pageSize) {
+    handleSizeChange: function (pageSize) {
       // 每页条数切换
       this.pageSize = pageSize;
       this.handleCurrentChange(this.currentPage);
     },
-    handleCurrentChange: function(currentPage) {
+    handleCurrentChange: function (currentPage) {
       // 页码切换
       this.currentPage = currentPage;
       this.currentChangePage(this.paintInfos, currentPage);
@@ -207,16 +209,16 @@ export default {
         }
       }
     },
-    filter_rows: function() {
+    filter_rows: function () {
       var filter_name = this.filter_name;
       return filter_name !== ""
-        ? this.paintInfos.filter(searchResult => {
+        ? this.paintInfos.filter((searchResult) => {
             return searchResult.nickname.indexOf(filter_name) > -1;
           })
         : this.paintInfos;
-    }
+    },
   },
-  created: function() {
+  created: function () {
     // let self = this
     // this.handleSizeChange()
     this.getGenre();
@@ -225,7 +227,7 @@ export default {
     // console.log(self.paintInfos)
     // console.log('test' + self.greneDatas)
     // console.log(self.greneDatas)
-  }
+  },
 };
 </script>
 

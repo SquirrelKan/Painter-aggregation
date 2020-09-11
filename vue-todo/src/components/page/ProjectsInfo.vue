@@ -48,7 +48,7 @@ export default {
     getProjectInfo(pid) {
       let self = this;
       self.$axios
-        .post("/api/v1/project/getProject", {
+        .post("/api/v1/project/project", {
           pid: pid
         })
         .then(function(response) {

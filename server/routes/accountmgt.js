@@ -4,7 +4,9 @@
 var debug = require("debug")("debug:accountmgt");
 var express = require('express')
 var router = express.Router()
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
+const message = require("../message");
+const requestStatusCodes = require("../requestStatusCodes");
 const SECRET_KEY = require('../config/config').SECRET_KEY
 
 router.get('/getAccountInfo', function (req, res, next) {
@@ -42,13 +44,22 @@ router.get('/getAccountInfo', function (req, res, next) {
   })
 })
 
-router.post('/updateAccountInfo', function (req, res) {
+router.put('/accountInfo', function (req, res) {
   // debug(req.body)
   let updateInfo = req.body.updateInfo
+  debug(updateInfo)
+  let param =
+    [
+      updateInfo.account
+      , updateInfo.realname
+      , updateInfo.nickname
+      , updateInfo.icon
+      , updateInfo.email
+      , updateInfo.cellphone
+      , updateInfo.birthday
+      , updateInfo.address
+    ]
 
-  param = [
-    updateInfo.username, updateInfo.realname, updateInfo.nickname, updateInfo.icon, updateInfo.email, updateInfo.cellphone, updateInfo.birthday, updateInfo.address
-  ]
 
   let sql = `rsUpdateAccountInfo`
   req.query(sql, param, function (error, results, fields) {
@@ -56,15 +67,10 @@ router.post('/updateAccountInfo', function (req, res) {
       debug()
       throw error
     }
-    return res.send({
-      status: '0000',
-      message: 'update success',
-      // data: {
-      //   login: results
-      // }
-    })
+    return res.send(
+      message(requestStatusCodes.success, null)
+    )
   })
-  debug(sql)
 })
 
 module.exports = router

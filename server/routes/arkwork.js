@@ -1,7 +1,9 @@
 'use strict';
 
 var debug = require("debug")("debug:arkwork");
-var express = require('express')
+var express = require('express');
+const message = require("../message");
+const requestStatusCodes = require("../requestStatusCodes");
 var router = express.Router()
 
 router.get('/getArtwork', function (req, res) {
@@ -11,15 +13,10 @@ router.get('/getArtwork', function (req, res) {
             debug(error)
             return res.status(400).send();
         }
-        return res.status(200).send({
-            status: '0000',
-            message: 'get Artwork',
-            data: {
-                projects: results[0]
-            }
-        })
+        return res.status(200).send(
+            message(requestStatusCodes.success, { projects: results[0] })
+        )
     })
-    debug('test')
 })
 
 debug('arkwork載入完成')
