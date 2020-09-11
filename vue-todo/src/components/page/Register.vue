@@ -54,30 +54,30 @@ export default {
         email: "",
         password: "",
         confirmpassword: "",
-        identity: "2"
+        identity: "2",
       },
       rules: {
         nickName: [
           { required: true, message: "請輸入暱稱", trigger: "blur" },
-          { min: 2, max: 6, message: "暱稱在6個字以內", trigger: "blur" }
+          { min: 2, max: 6, message: "暱稱在6個字以內", trigger: "blur" },
         ],
         account: [
           { required: true, message: "請輸入帳號", trigger: "blur" },
           { min: 1, max: 50, message: "帳號在50個字以內", trigger: "blur" },
-          { pattern: /^\S+$/, message: "不允許有空格", trigger: "blur" }
+          { pattern: /^\S+$/, message: "不允許有空格", trigger: "blur" },
         ],
         email: [{ required: true, message: "請輸入email", trigger: "blur" }],
         password: [
           {
             required: true,
             message: "請輸入密碼",
-            trigger: "blur"
+            trigger: "blur",
           },
           {
             pattern: /^(?=.*\d)(?=.*[a-zA-Z])(?=.*[\W_]).{6,20}$/,
             message: "请输入长度为6-20位包含数字、字母、特殊字符的密码",
-            trigger: "blur"
-          }
+            trigger: "blur",
+          },
         ],
         confirmpassword: [
           // {
@@ -85,14 +85,14 @@ export default {
           //   message: "請輸入確認密碼",
           //   trigger: "blur"
           // },
-          { validator: validatePass, trigger: "change" }
-        ]
-      }
+          { validator: validatePass, trigger: "change" },
+        ],
+      },
     };
   },
   methods: {
     onSubmitClick(formName) {
-      this.$refs[formName].validate(vaild => {
+      this.$refs[formName].validate((vaild) => {
         console.log(vaild);
       });
       let self = this;
@@ -100,9 +100,9 @@ export default {
       if (self.submitForm.username !== "" && self.submitForm.password !== "") {
         self.$axios
           .post("/api/v1/auth/getUserInfo", {
-            username: self.submitForm.username
+            username: self.submitForm.username,
           })
-          .then(function(response) {
+          .then(function (response) {
             let data = response.data;
             console.log(data);
             if (data.status === "0001") {
@@ -110,34 +110,35 @@ export default {
               self.$message({
                 showClose: true,
                 message: "帳號存在，請重新輸入",
-                type: "error"
+                type: "error",
               });
             } else if (data.status === "0000") {
               console.log("帳號不存在");
               self.$axios
                 .post("/api/v1/auth/register", {
                   nickName: self.submitForm.nickName,
-                  account: self.submitForm.account,
+                  username: self.submitForm.username,
                   email: self.submitForm.email,
                   password: md5(self.submitForm.password),
-                  identity: self.submitForm.identity
+                  identity: self.submitForm.identity,
                 })
-                .then(function(response) {
+                .then(function (response) {
                   let data = response.data;
                   console.log(data);
-                  if (data.status === "0000") {
-                    localStorage.setItem("claims", response.data.claims);
+                  if (data.status === 200) {
+                    console.log;
+                    localStorage.setItem("claims", response.data.data.claims);
                     self.$message({
                       showClose: true,
                       message: "恭喜妳，已成功註冊",
-                      type: "success"
+                      type: "success",
                     });
                     self.$router.push({ name: "AccoutInfo" });
                   } else {
                     self.$message({
                       showClose: true,
                       message: "登入失敗",
-                      type: "error"
+                      type: "error",
                     });
                   }
                 });
@@ -147,14 +148,14 @@ export default {
     },
     toLogin() {
       this.$router.push("/login");
-    }
+    },
   },
-  created: function() {
+  created: function () {
     let claims = localStorage.getItem("claims");
     if (claims) {
       this.$router.push({ name: "Home" });
     }
-  }
+  },
 };
 </script>
 

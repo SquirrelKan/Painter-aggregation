@@ -46,8 +46,10 @@
                   <el-dropdown-item>
                     <router-link to="/projectindex">業主主頁</router-link>
                   </el-dropdown-item>
+                  <el-dropdown-item>
+                    <router-link to="/invite">邀請頁</router-link>
+                  </el-dropdown-item>
                 </template>
-                <el-dropdown-item>Action 3</el-dropdown-item>
                 <el-dropdown-item>Action 4</el-dropdown-item>
                 <el-dropdown-item>Action 5</el-dropdown-item>
               </el-dropdown-menu>

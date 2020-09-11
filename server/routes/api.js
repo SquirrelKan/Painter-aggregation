@@ -1,14 +1,12 @@
 'use strict';
 
 var debug = require("debug")("debug:api");
-var express = require('express')
+var express = require('express');
+const message = require("../message");
+const requestStatusCodes = require("../requestStatusCodes");
 var router = express.Router()
 
-router.post('/account', function (req, res) {
-
-})
-
-router.get('/getPaint', function (req, res) {
+router.get('/paint', function (req, res) {
   // body...
   let sql = `rsGetPaint`
   // debug(sql)
@@ -17,33 +15,11 @@ router.get('/getPaint', function (req, res) {
       debug(error)
       return res.status(400).send()
     }
-    return res.status(200).send({
-      message: 'get paintdata',
-      data: {
-        paints: results[0]
-      }
-    })
+    return res.status(200).send(
+      message(requestStatusCodes.success, { paints: results[0] })
+    )
   })
 })
-
-router.get('/getStyle', function (req, res) {
-  // body...
-  let sql = `rsGetStyle`
-  // debug(sql)
-  req.query(sql, 0, function (error, results, fields) {
-    if (error) {
-      debug(error)
-    }
-    return res.send({
-      status: '0000',
-      message: 'get style',
-      data: {
-        StyleDate: results[0]
-      }
-    })
-  })
-})
-
 router.post('/getUserInfo', function (req, res) {
   let userData = {
     username: req.body.username
@@ -55,19 +31,14 @@ router.post('/getUserInfo', function (req, res) {
       debug(error)
     }
     if (results[0].length === 0) {
-      return res.send({
-        status: '0001',
-        message: 'get error',
-      })
-    }
-    return res.send({
-      status: '0000',
-      message: 'get list',
-      data: {
-        userInfo: results[0]
-      }
-    })
+      return res.send(
 
+        message(requestStatusCodes.error, null)
+      )
+    }
+    return res.send(
+      message(requestStatusCodes.success, { userInfo: results[0] })
+    )
   })
 })
 
@@ -85,33 +56,21 @@ router.post('/gettest', function (req, res) {
       }
       debug(results)
       if (!results)
-        return res.send({
-          status: '0000',
-          message: 'get list error',
-        })
+        return res.send(
+          message(requestStatusCodes.error)
+        )
       if (results[0].length === 0) {
         return res.send({
           status: '0001',
           message: 'get error',
         })
       }
-      return res.send({
-        status: '0000',
-        message: 'get list',
-        data: {
-          user: results[0]
-        }
-      })
-
+      return res.send(
+        message(requestStatusCodes.success, { user: results[0] })
+      )
     })
   } catch (error) {
-    res.send({
-      status: '0000',
-      message: 'get list error',
-      data: {
-
-      }
-    })
+    message(requestStatusCodes.error, null)
   }
 
 })

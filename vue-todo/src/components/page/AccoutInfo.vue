@@ -117,7 +117,7 @@ export default {
         "YYYY-MM-DD"
       );
       self.$axios
-        .post("/api/v1/accountmgt/updateAccountInfo", {
+        .put("/api/v1/accountmgt/accountInfo", {
           headers: {
             authorization: "Bearer " + claims
           },
@@ -126,7 +126,7 @@ export default {
         .then(function(response) {
           let data = response.data;
           // console.log(data)
-          if (data.status === "0000") {
+          if (data.status === 200) {
             // localStorage.setItem('claims', response.data.claims)
             self.$message({
               showClose: true,

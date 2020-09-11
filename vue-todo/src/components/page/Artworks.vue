@@ -120,14 +120,14 @@ export default {
   methods: {
     getGenre() {
       let self = this;
-      self.$axios.get("/api/v1/common/getGenre", {}).then(function(response) {
-        self.greneDatas = response.data.data.greneData;
+      self.$axios.get("/api/v1/common/genre", {}).then(function(response) {
+        self.greneDatas = response.data.data;
       });
     },
     getStyle() {
       let self = this;
-      self.$axios.get("/api/v1/getStyle", {}).then(function(response) {
-        self.styleDatas = response.data.data.StyleDate;
+      self.$axios.get("/api/v1/common/style", {}).then(function(response) {
+        self.styleDatas = response.data.data;
       });
     },
     filter_rows: function() {

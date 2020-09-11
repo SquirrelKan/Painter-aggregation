@@ -11,7 +11,7 @@ const arkwork = require("./routes/arkwork")
 const project = require("./routes/project")
 const jwt = require('jsonwebtoken');
 const SECRET_KEY = require('./config/config').SECRET_KEY;
-var mysqlPoolQuery = require("./mysqlconnection")
+var mysqlPoolQuery = require("./db/mysqlconnection")
 
 const verifyToken = (req, res, next) => {
   if (!req.headers.authorization) {

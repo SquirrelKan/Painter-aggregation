@@ -4,7 +4,10 @@
 var debug = require("debug")("debug:auth");
 var express = require('express')
 var router = express.Router()
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
+const message = require("../message");
+const requestStatusCodes = require("../requestStatusCodes");
+const { use } = require("./api");
 const SECRET_KEY = require('../config/config').SECRET_KEY
 
 router.get('/getUserInfo', function (req, res, next) {
@@ -49,7 +52,8 @@ router.post('/getUserInfo', function (req, res) {
       debug(error)
       throw error
     }
-    if (results.length !== 0) {
+    debug(results)
+    if (results[0].length !== 0) {
       return res.send({
         status: '0001',
         message: 'getUserinfo 存在'
@@ -82,10 +86,9 @@ router.post('/login', function (req, res) {
     }
     if (results[0].length == 0) {
       debug(req.body.account + ' login error')
-      return res.send({
-        status: '0001',
-        message: 'login error'
-      })
+      return res.send(
+        message(requestStatusCodes.error, null)
+      )
     }
     // data= {data}
     // debug(results[0])
@@ -98,19 +101,17 @@ router.post('/login', function (req, res) {
       expiresIn: 60 * 60 * 1
     })
     debug(req.body.account + ' login success')
-    return res.send({
-      status: '0000',
-      claims: claims,
-      message: 'login success',
-      data: userinfo
-    })
+    return res.send(
+      message(requestStatusCodes.success, { 'claims': claims, 'userinfo': userinfo })
+    )
   })
 })
 
 router.post('/register', function (req, res) {
+  debug(req.body)
   let todo = [
-    req.body.nickname,
-    req.body.account,
+    req.body.username,
+    req.body.nickName,
     req.body.email,
     req.body.password,
     req.body.identity
@@ -126,30 +127,24 @@ router.post('/register', function (req, res) {
     }
     if (results.length == 0) {
       debug(req.body.account + ' register error')
-      return res.send({
-        status: '0001',
-        message: 'register error'
-      })
+      return res.send(
+        message(requestStatusCodes.error, null)
+      )
     }
     debug(req.body.account + ' register success')
     let userinfo = {
       account: req.body.account,
       nickname: req.body.nickname,
-      identity: req.body.identity_name === 2 ? ('paint') : (req.body.identity_name === 1 ? ('admin') : ('p'))
+      identity: req.body.identity_name === 2 ? ('paint') : (req.body.identity_name === 1 ? ('admin') : ('project'))
     }
     const claims = jwt.sign({
       userInfo: userinfo
     }, SECRET_KEY, {
       expiresIn: 60 * 60 * 24
     })
-    return res.send({
-      status: '0000',
-      message: 'register list',
-      claims: claims,
-      data: {
-        login: results
-      }
-    })
+    return res.send(
+      message(requestStatusCodes.success, { 'claims': claims, 'login': results })
+    )
   })
 })
 

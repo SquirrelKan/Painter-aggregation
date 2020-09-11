@@ -133,38 +133,38 @@ export default {
       projects: [
         {
           value: "選項1",
-          label: "發布時間"
+          label: "發布時間",
         },
         {
           value: "選項2",
-          label: "稿酬預算"
+          label: "稿酬預算",
         },
         {
           value: "選項3",
-          label: "雇主信譽"
+          label: "雇主信譽",
         },
         {
           value: "選項4",
-          label: "應徵人數"
-        }
+          label: "應徵人數",
+        },
       ],
       value: "",
       marks: {
         0: "",
         1: "",
         2: "",
-        3: ""
+        3: "",
       },
       deadline: "一個月內",
-      projectsInfo: []
+      projectsInfo: [],
     };
   },
   methods: {
     getProjects() {
       let self = this;
       self.$axios
-        .get("/api/v1/project/getProjects", {})
-        .then(function(response) {
+        .get("/api/v1/project/projects", {})
+        .then(function (response) {
           //console.log('getProjects test')
           self.projectsInfo = response.data.data.projects;
           // console.log(response.data.data);
@@ -174,16 +174,16 @@ export default {
           //   self.tempList.push(self.projects[i]);
           // }
         })
-        .catch(function(_error) {
+        .catch(function (_error) {
           console.log(_error);
         });
     },
-    handleSizeChange: function(pageSize) {
+    handleSizeChange: function (pageSize) {
       // 每页条数切换
       this.pageSize = pageSize;
       this.handleCurrentChange(this.currentPage);
     },
-    handleCurrentChange: function(currentPage) {
+    handleCurrentChange: function (currentPage) {
       // 页码切换
       this.currentPage = currentPage;
       this.currentChangePage(this.projectsInfo, currentPage);
@@ -217,11 +217,11 @@ export default {
           break;
       }
       this.deadline = s;
-    }
+    },
   },
-  created: function() {
+  created: function () {
     this.getProjects();
-  }
+  },
 };
 </script>
 

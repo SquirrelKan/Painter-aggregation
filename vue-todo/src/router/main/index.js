@@ -105,7 +105,7 @@ export default {
       path: '/invite',
       name: 'Invite',
       meta: {
-        title: '首頁 - 繪師集'
+        title: '首頁 - 邀請頁面'
       },
       component: () => import( /* webpackChunkName: "Main" */ '@/components/page/Invite')
     },

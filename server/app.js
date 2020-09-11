@@ -1,7 +1,5 @@
 var express = require('express');
-var express = require('express');
 var bodyParser = require('body-parser')
-var mysql = require("mysql")
 var app = express()
 const api = require("./routes/api")
 const common = require('./routes/common.js')
@@ -11,7 +9,7 @@ const artwork = require("./routes/arkwork")
 const project = require("./routes/project")
 const jwt = require('jsonwebtoken');
 const SECRET_KEY = require('./config/config').SECRET_KEY;
-var mysqlPoolQuery = require("./mysqlconnection")
+var mysqlPoolQuery = require("./db/mysqlconnection")
 
 var index = require('./routes/index');
 
