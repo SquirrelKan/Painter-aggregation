@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"> -->
+    <!-- <script src="https://unpkg.com/element-ui/lib/index.js"></script> -->
+
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <link rel="stylesheet" type="text/css" href="/style.css" />
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.core.min.js"
+        integrity="sha512-qcjxCpal2fC5XTlJBB6yc/T2g7Xuxd0uHz+syZZEByojMPnKXroczpN3vrxL3ifHx4RVy4Jj8jVkXseQ5irtWA=="
+        crossorigin="anonymous"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"
+        integrity="sha512-wBcFatf7yQavHQWtf4ZEjvtVz4XkYISO96hzvejfh18tn3OrJ3sPBppH0B6q/1SHB4OKHaNNUKqOmsiTGlOM/g=="
+        crossorigin="anonymous"></script>
+
+    <script type="text/x-template" id="modal-template">
+            <transition name="modal">
+              <div class="modal-mask">
+                <div class="modal-wrapper">
+                  <div class="modal-container">
+      
+                    <div class="modal-header">
+                      <slot name="header">
+                        default header
+                      </slot>
+                    </div>
+      
+                    <div class="modal-body">
+                      <slot name="body">
+                        default body
+                      </slot>
+                    </div>
+      
+                    <div class="modal-footer">
+                      <slot name="footer">
+                        default footer
+                        <button class="modal-default-button" @click="$emit('close')">
+                          OK
+                        </button>
+                      </slot>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </transition>
+          </script>
+</head>
+
+<body>
+    <div id='app'>
+        <template>
+            <input type="text" v-model="PartnerCode" placeholder="PartnerCode">
+            <input type="text" v-model="PartnerKey" placeholder="PartnerKey">
+            <input type="text" v-model="Reseller" placeholder="Reseller">
+            <!-- <button type="button" @click="test">test</button> -->
+            <input type="file" id="excel-file" @change="test">
+            <button id="show-modal" @click="showModal = true">Show Modal</button>
+            <modal v-if="showModal" @close="CloseModal">
+                <h3 slot="header">custom header</h3>
+                <p slot="body">APIIPWhiteList</p>
+                <textarea slot="body" type="text" v-model="APIIPWhiteList"></textarea>
+                <p slot="body">BOIPWhiteList</p>
+                <textarea slot="body" type="text" v-model="BOIPWhiteList"></textarea>
+                <p slot="body">AuthenticationURL</p>
+                <input slot="body" type="text" v-model="AuthenticationURL">
+                <input slot="body" type="text">
+            </modal>
+        </template>
+    </div>
+    <div></div>
+    <div id="result"></div>
+</body>
+<script type="text/javascript">
+
+    Vue.component("modal", {
+        template: "#modal-template"
+    });
+    var app = new Vue({
+        el: '#app',
+        data: function () {
+            return {
+                PartnerCode: "",
+                PartnerKey: "",
+                Reseller: "",
+                worksheet: null,
+                showModal: false,
+                APIIPWhiteList: "",
+                BOIPWhiteList: "",
+                ApiRoot: function () {
+                    if (!this.PartnerCode)
+                        return "";
+                    return `http://api.${this.PartnerCode}.com`;
+                },
+                WebRoot: function () {
+                    if (!this.PartnerCode)
+                        return "";
+                    return `http://.${this.PartnerCode}.com`;
+                },
+                MobileRoot: function () {
+                    if (!this.PartnerCode)
+                        return "";
+                    return `http://mobile.${this.PartnerCode}.com`;
+                },
+                NewMobileRoot: function () {
+                    if (!this.PartnerCode)
+                        return "";
+                    return `http://smart.${this.PartnerCode}.com`;
+                },
+                BODomain: function () {
+                    return "http://bo.flashtechsolution.com	";
+                },
+                Account: function () {
+                    return `${this.PartnerCode}admin`;
+                }
+            }
+        },
+        methods: {
+            test(e) {
+                let that = this;
+
+                var files = e.target.files;
+
+                var FileReader = new window.FileReader();
+                // console.log (XLSX.readFile(files, { cellStyles: true }))
+                FileReader.onload = function (ev) {
+                    try {
+                        var data = ev.target.result;
+                        workbook = XLSX.read(data, { type: 'binary', cellStyles: true }),
+                            persons = [];
+                    } catch (e) {
+                        console.log('檔案型別不正確');
+                        return;
+                    }
+
+                    var sheetNames = workbook.SheetNames; // 工作表名称集合
+
+                    var worksheet = workbook.Sheets[sheetNames[0]]; // 这里我们只读取第一张sheet
+                    that.AuthenticationURL = worksheet.C16.v
+                    that.APIIPWhiteList = worksheet.B19.v;
+                    that.BOIPWhiteList = worksheet.D19.v;
+                    that.worksheet = worksheet;
+                    that.LoadData()
+                    console.log(worksheet)
+                    // console.log(persons);
+                }
+                FileReader.readAsBinaryString(files[0]);
+            },
+            Fomat(value) {
+
+                return { t: "s", v: value, w: value };
+            },
+            CloseModal() {
+                this.showModal = false;
+                this.LoadData();
+            }
+            ,
+            LoadData() {
+                var worksheet = this.worksheet;
+                worksheet.C16 = this.Fomat(this.AuthenticationURL);
+                worksheet.B19 = this.Fomat(this.APIIPWhiteList);
+                worksheet.D19 = this.Fomat(this.BOIPWhiteList);
+                worksheet.C4 = this.Fomat(this.PartnerCode)
+                worksheet.C5 = this.Fomat(this.PartnerKey)
+                worksheet.E5 = this.Fomat(this.Reseller)
+                worksheet.C8 = this.Fomat(this.ApiRoot())
+                worksheet.C9 = this.Fomat(this.WebRoot())
+                worksheet.C10 = this.Fomat(this.MobileRoot())
+                worksheet.C11 = this.Fomat(this.NewMobileRoot())
+                worksheet.C12 = this.Fomat(this.BODomain())
+                worksheet.C13 = this.Fomat(this.Account())
+                worksheet.C26 = this.Fomat(this.ApiRoot())
+                worksheet.C27 = this.Fomat(this.WebRoot())
+                worksheet.C28 = this.Fomat(this.MobileRoot())
+                worksheet.C29 = this.Fomat(this.NewMobileRoot())
+                worksheet.C30 = this.Fomat(this.BODomain())
+                var csv = XLSX.utils.sheet_to_csv(worksheet);
+                document.getElementById('result').innerHTML = this.csv2table(csv);
+            },
+            SaveData() {
+                // logo.png
+                var table1 = document.querySelector("#table1");
+
+                this.worksheet['!images'] = [
+                    {
+                        name: 'logo.png',
+                        data: "logo.png",
+                        opts: { base64: true },
+                        position: {
+                            type: 'twoCellAnchor',
+                            attrs: { editAs: 'oneCell' },
+                            from: { col: 2, row: 1 },
+                            to: { col: 6, row: 1 }
+                        }
+                    }
+                ];
+                this.worksheet.B2.s.font = { color: "FF0187FA" };
+                this.worksheet.B2.s.alignment = { vertical: "center", horizontal: "center" };
+                const workbook = { Sheets: { Form: this.worksheet }, SheetNames: ['Form'] }
+                XLSX.writeFile(workbook, `${new Date().format("yyyyMMdd")}_${this.Reseller}_${this.PartnerCode}_PORD.xlsx`);
+
+            },
+            async beforeUpload(file) {
+                const workbook = await readXLSX(file)
+                console.log(workbook)
+                return false;
+            }, csv2table(csv) {
+                var that = this;
+                var html = '<table style="table-layout:fixed;word-break:break-all; border-collapse: collapse;text-align: center;">';
+                // console.log(csv);
+                var rows = csv.split('\n');
+                rows.pop(); // 最后一行没用的
+                console.log(that.worksheet["!rows"])
+                var hights = that.worksheet["!rows"];
+                var colors = [
+                    [2, "#C4D79B"],
+                    [3, "#EBF1DE"],
+                    [4, "#EBF1DE"],
+                    [5, "#EBF1DE"],
+                    [6, "#FFFFFF"],
+                    [7, "#DA9694"],
+                    [8, "#F2DCDB"],
+                    [9, "#F2DCDB"],
+                    [10, "#F2DCDB"],
+                    [11, "#F2DCDB"],
+                    [12, "#F2DCDB"],
+                    [13, "#F2DCDB"],
+                    [14, "#F2DCDB"],
+                    [15, "#DA9694"],
+                    [16, "#F2DCDB"],
+                    [17, "#F2DCDB"],
+                    [18, "#F2DCDB"],
+                    [19, "#F2DCDB"],
+                    [20, "#F2DCDB"],
+                    [21, "#F2DCDB"],
+                    [22, "#F2DCDB"],
+                    [23, "#F2DCDB"],
+                    [24, "#F2DCDB"],
+                    [25, "#92CDDC"],
+                    [26, "#DAEEF3"],
+                    [27, "#DAEEF3"],
+                    [28, "#DAEEF3"],
+                    [29, "#DAEEF3"],
+                    [30, "#DAEEF3"],
+                    [31, "#DAEEF3"],
+                    [32, "#DAEEF3"],
+                    [33, "#92CDDC"],
+                    [34, "#DAEEF3"],
+                    [35, "#DAEEF3"],
+                    [36, "#DAEEF3"],
+                    [37, "#DAEEF3"],
+                    [38, "#DAEEF3"],
+                    [39, "#DAEEF3"],
+                    [40, "#DAEEF3"],
+                    [41, "#DAEEF3"],
+                    [42, "#DAEEF3"]
+
+                ]
+                var a = [1, 6, 14, 24, 32, 42];
+                var sp =
+                    [
+                        [2, 2, [1, 3]],
+                        [7, 7, [1, 3]],
+                        [8, 8, [1, 3]],
+                        [9, 9, [1, 3]],
+                        [10, 10, [1, 3]],
+                        [11, 11, [1, 3]],
+                        [12, 12, [1, 3]],
+                        [15, 15, [1, 3]],
+                        [16, 16, [1, 3]],
+                        [17, 17, [1, 3]],
+                        [18, 18, 2],
+                        [19, 23, 2],
+                        [25, 25, [1, 3]],
+                        [26, 26, [1, 3]],
+                        [27, 27, [1, 3]],
+                        [28, 28, [1, 3]],
+                        [29, 29, [1, 3]],
+                        [30, 30, [1, 3]],
+                        [33, 33, [1, 3]],
+                        [34, 34, [1, 3]],
+                        [35, 35, [1, 3]],
+                        [36, 36, 2],
+                        [37, 41, 4]
+                    ];
+                var heightType = null;
+                rows.forEach(function (row, idx) {
+                    if (idx + 1 >= 43)
+                        return;
+                    var columns = row.split(',');
+                    columns.unshift(idx + 1); // 添加行索引
+                    var color = null;
+                    colors.forEach(element => {
+                        if (idx + 1 == element[0]) {
+                            color = element
+                            return;
+                        }
+                    });
+
+                    if (idx == 0) { // 添加列索引
+                        html += '<tr' + color + '>';
+                        for (var i = 0; i < columns.length; i++) {
+                            html += `<th ${i === 0 ? 'width="20"' : 'width="143"'} style="border: 1px solid;">` + (i == 0 ? '' : String.fromCharCode(65 + i - 1)) + '</th>';
+                        }
+                        html += '</tr>';
+                    }
+
+                    var s = a.indexOf(idx + 1) != -1;
+                    console.log(idx + 1, hights[idx])
+                    heightType = hights[idx] != null ? hights[idx] : heightType;
+                    html += `<tr style="height:${heightType.hpx}px; ${(color != null ? `background: ${color[1]}` : "")}"> `;
+                    //html += '<tr>';
+                    var index = 0;
+                    var spbool = null;
+                    sp.forEach(element => {
+                        if (idx + 1 >= element[0] && idx + 1 <= element[1]) {
+                            spbool = element
+                        }
+                    });
+                    if (spbool !== null) {
+                        var ac = ''
+                        // console.log(idx + 1, spbool[1])
+                        if (idx + 1 === spbool[0] && (spbool[1] - spbool[0]) > 0) {
+                            ac = 'rowspan="' + (spbool[1] - spbool[0] + 1) + '" ' + 'colspan="' + spbool[2] + '"'
+                            // console.log(ac, idx + 1)
+                        }
+                        else {
+                            if (Array.isArray(spbool[2])) {
+                                ac = 'colspan="' + spbool[2][1] + '"'
+                            }
+                            else {
+                                ac = 'colspan="' + spbool[2] + '"'
+                            }
+                            // console.log(ac, idx + 1)
+                        }
+                        columns.forEach(function (column) {
+                            if (index > 1 && index < columns.length - 1 && idx + 1 === spbool[0]) {
+                                if (Array.isArray(spbool[2])) {
+                                    if (index === 2)
+                                        html += '<td style="border: 1px solid;">' + column + '</td>';
+                                    else if (index === 3) {
+                                        console.log(index)
+                                        html += '<td style="border: 1px solid;"' + ac + '>' + column + '</td>';
+
+                                    }
+                                }
+                                else if ((index - 2) % spbool[2] == 0 && index != 0 && !Array.isArray(spbool[2]))
+                                    html += '<td style="border: 1px solid;"' + ac + '>' + column + '</td>';
+                            }
+                            else {
+                                if (index === 0) {
+                                    html += '<td style="border: 1px solid; background: #ffffff;">' + column + '</td>';
+                                }
+                                else {
+                                    html += '<td style="background: #ffffff;">' + column + '</td>';
+                                }
+                            }
+                            index++
+                        })
+                    }
+                    else {
+                        columns.forEach(function (column) {
+                            if (idx + 1 === 1) {
+                                if (index === 0)
+                                    html += '<td style="border: 1px solid; background: #ffffff;">' + column + '</td>';
+                                else if (index === 1) {
+                                    html += '<td colspan="6" style="background: #ffffff;">' + '<img src="logo.png">' + '</td>';
+                                }
+                            }
+                            else if (index === 1 || index === columns.length - 1) {
+                                html += '<td style="background: #ffffff;">' + column + '</td>';
+                            }
+                            else if (index === 0) {
+                                html += '<td style="border: 1px solid; background: #ffffff;">' + column + '</td>';
+                            }
+                            else if (s) {
+                                html += '<td style="background: #ffffff;">' + column + '</td>';
+                            }
+                            else {
+                                html += '<td style="border: 1px solid;">' + column + '</td>';
+                            }
+                            index++;
+                        });
+                    }
+                    html += '</tr>';
+                });
+                html += '</table>';
+                return html;
+            }
+            ,
+            showDynamicRuntimeModal() {
+                this.$modal.show(
+                    {
+                        template: `
+                        < div class="example-modal-content" >
+                <p>Component has been created inline.</p>
+                <p>{{ text }}</p>
+                <p>This component is draggable because of the "dynamicDefault" property.</p>
+              </div >
+            `,
+                        props: ['text']
+                    },
+                    {
+                        text: 'Text has been passed as a property.'
+                    },
+                    {
+                        height: 'auto'
+                    }
+                )
+            }
+        }
+    })
+    function readWorkbookFromLocalFile(file, callback) {
+        var reader = new FileReader();
+        reader.readAsBinaryString(file);
+        reader.onload = function (e) {
+            var data = e.target.result;
+            var workbook = XLSX.read(data, { type: 'binary' });
+            if (callback) callback(workbook);
+        };
+
+    }
+    function outputWorkbook(workbook) {
+        var sheetNames = workbook.sheetNames;
+        sheetNames.forEach(name => {
+            var worksheet = workbook.Sheets[name];
+            for (var key in worksheet) {
+                console.log(key, key[0] === '!' ? worksheet[key] : worksheet[key].v);
+            }
+        })
+
+    }
+    Date.prototype.format = function (fmt) {
+        var o = {
+            "M+": this.getMonth() + 1, //月份
+            "d+": this.getDate(), //日
+            "h+": this.getHours(), //小時
+            "m+": this.getMinutes(), //分
+            "s+": this.getSeconds(), //秒
+            "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+            "S": this.getMilliseconds() //毫秒
+        };
+        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)
+            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        return fmt;
+    }
+</script>
+
+</html>
