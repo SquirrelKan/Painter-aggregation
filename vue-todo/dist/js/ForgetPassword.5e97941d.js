@@ -1,0 +1,2 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["ForgetPassword"],{"61db":function(e,n,t){"use strict";t.r(n);var r=function(){var e=this,n=e.$createElement,t=e._self._c||n;return t("div",[e._v("12312312312")])},s=[],o={name:"ForgetPassword"},a=o,l=t("2877"),u=Object(l["a"])(a,r,s,!1,null,null,null);n["default"]=u.exports}}]);
+//# sourceMappingURL=ForgetPassword.5e97941d.js.map
