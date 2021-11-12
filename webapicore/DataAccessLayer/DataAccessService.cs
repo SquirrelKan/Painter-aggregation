@@ -14,7 +14,7 @@ namespace webapicore.DataAccessLayer
 {
     public class DataAccessLayer
     {
-        private static string _connectionStr = "server=34.80.160.131;Database=paintercol;user id=maple;password=aicdfida";
+        private static string _connectionStr = "server=10.0.4.29;Database=paintercol;user id=maple;password=aicdfida";
 
         public static string connectionStr { get { return _connectionStr; } }
 

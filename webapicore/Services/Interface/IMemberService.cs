@@ -10,6 +10,6 @@ namespace webapicore.Services.Interface
     {
         Task<List<Member>> GetMember();
         Task<Member> GetUserByUserNamePassWord(string userName, string passWord);
-        void Register(UserInfo userInfo);
+        UserInfo Register(UserInfo userInfo);
     }
 }

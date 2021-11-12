@@ -18,5 +18,11 @@ namespace webapicore.Services
         {
             throw new NotImplementedException();
         }
+
+        public UserInfo Register(UserInfo userInfo)
+        {
+
+            throw new NotImplementedException();
+        }
     }
 }
