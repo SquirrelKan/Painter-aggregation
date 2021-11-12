@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
-using webapicore.DataAccessLayer;
 using webapicore.Enums;
 using webapicore.Extension;
 using webapicore.Models;
@@ -10,6 +9,8 @@ using webapicore.Services.Interface;
 
 namespace webapicore.Controllers
 {
+    [ApiController]
+    [Route("[controller]")]
     public class MemberController : Controller
     {
         private readonly ILogger<MemberController> _logger;
@@ -20,11 +21,13 @@ namespace webapicore.Controllers
             _logger = logger;
             _memberService = memberService;
         }
+
         [HttpGet]
         public IActionResult Index()
         {
             return View();
         }
+
         [HttpPost]
         public IActionResult Register(string username, string nickName, string email, string password, string identity)
         {
@@ -32,12 +35,11 @@ namespace webapicore.Controllers
             userInfo.UserName = username;
             userInfo.NickName = nickName;
             userInfo.Username = email;
-               userInfo.Password=password;
+            userInfo.Password = password;
             userInfo.Identity = Enum.Parse(typeof(IdentityType), identity);
             _logger.LogDebug(Stored_ProcedureEnum.Register.GetDescription());
             var result = _memberService.Register(userInfo);
             return null;
         }
-
     }
 }
